@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Client", "ANTIL.Client\ANTIL.Client.csproj", "{ECD06ABF-92FB-415E-A7AF-11D255121F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Domain", "ANTIL.Domain\ANTIL.Domain.csproj", "{8CC33349-1019-48A5-B45C-3C03E19696E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Server", "ANTIL.Server\ANTIL.Server.csproj", "{39D724E9-8D09-4827-B07F-01C0BF6B087A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECD06ABF-92FB-415E-A7AF-11D255121F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD06ABF-92FB-415E-A7AF-11D255121F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD06ABF-92FB-415E-A7AF-11D255121F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD06ABF-92FB-415E-A7AF-11D255121F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC33349-1019-48A5-B45C-3C03E19696E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC33349-1019-48A5-B45C-3C03E19696E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC33349-1019-48A5-B45C-3C03E19696E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC33349-1019-48A5-B45C-3C03E19696E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

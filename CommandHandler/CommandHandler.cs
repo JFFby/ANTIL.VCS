@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using CommandHandler.Commands.Exit;
 
@@ -8,6 +9,7 @@ namespace CommandHandler
     /// <summary>
     /// Думаю не имеет смысла реализовавывать у CommandHandler никаких интерфейсов ибо
     /// мложно себе представить себе другую реализацию этого класса
+    /// З.Ы. как прочтёшь, удаляй
     /// </summary>
     public class CommandHandler
     {
@@ -20,14 +22,14 @@ namespace CommandHandler
 
         public void Run()
         {
-            WriteLine("Hello, I'm ANTIL");
+            WriteLine("Hello, I'm ANTIL and I'm Version Control System");
             do
             {
-                Write("> ");
+                Console.Write("> ");
                 var command = Console.ReadLine();
 
                 ExecuteMethod(command);
-                
+
             } while (true);
 
         }
@@ -44,7 +46,7 @@ namespace CommandHandler
 
             return new CommandItem
             {
-                Commant = commandArgs[0].ToLower(),
+                Commant = ProcessCommand(commandArgs[0]),
                 Args = new object[] { args }
             };
         }
@@ -53,25 +55,46 @@ namespace CommandHandler
         {
             var comandItem = ParseCommand(command);
 
+            if (comandItem.Commant.Length == 0)
+                return;
+
             MethodInfo methodInfo = controller.GetType().GetMethod(comandItem.Commant);
-            if(methodInfo != null)
+            if (methodInfo != null)
+            {
+                Console.Write("\n\n");
                 methodInfo.Invoke(controller, comandItem.Args);
+                Console.Write("\n\n");
+            }
             else
-                WriteLine("ANTIL: I don't know this command.",ConsoleColor.Red);
+            {
+                Console.Write("\n\n");
+                WriteLine("I don't know this command.", ConsoleColor.Red);
+                Console.Write("\n\n");
+            }
         }
 
         public void WriteLine(string msg, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(msg);
+            Console.WriteLine("ANTIL: " + msg);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public void Write(string msg, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            Console.Write(msg);
+            Console.Write("ANTIL: " + msg);
             Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
+        private string ProcessCommand(string command)
+        {
+            if (command.Length > 0)
+                return command.ToLower().Replace(command[0].ToString(),
+                    command[0].ToString().ToUpper());
+            else
+                return command;
+
         }
     }
 }

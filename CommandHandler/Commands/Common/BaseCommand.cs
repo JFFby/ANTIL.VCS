@@ -7,14 +7,14 @@ namespace CommandHandler.Commands.Common
         public void WriteLine(string msg, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(msg);
+            Console.WriteLine("ANTIL: " + msg);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public void Write(string msg, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            Console.Write(msg);
+            Console.Write("ANTIL: " + msg);
             Console.ForegroundColor = ConsoleColor.Gray;
         }
     }

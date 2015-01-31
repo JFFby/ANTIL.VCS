@@ -23,6 +23,7 @@ namespace CommandHandler
         public void Run()
         {
             WriteLine("Hello, I'm ANTIL and I'm Version Control System");
+            WriteLine("Use 'help' command to see all my features :)");
             do
             {
                 Console.Write("> ");
@@ -61,15 +62,11 @@ namespace CommandHandler
             MethodInfo methodInfo = controller.GetType().GetMethod(comandItem.Commant);
             if (methodInfo != null)
             {
-                Console.Write("\n\n");
                 methodInfo.Invoke(controller, comandItem.Args);
-                Console.Write("\n\n");
             }
             else
             {
-                Console.Write("\n\n");
                 WriteLine("I don't know this command.", ConsoleColor.Red);
-                Console.Write("\n\n");
             }
         }
 

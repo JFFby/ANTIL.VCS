@@ -8,7 +8,8 @@ namespace CommandHandler.Commands.Help
         public void Execute(ICollection<string> args)
         {
             WriteLine("Avaliable commands:\n");
-            WriteLine("exit - Exit from app");
+            WriteLine("1) exit      - Exit from app");
+            WriteLine("2) cd [path] - Go to the some directory");
         }
     }
 }

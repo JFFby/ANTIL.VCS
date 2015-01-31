@@ -57,7 +57,7 @@ namespace ANTIL.Server
         private static void InstallContainer()
         {
             IOC = new WindsorContainer();
-            IOC.Install(new WindsorInstaller());
+            IOC.Install(new WindsorNhibernateInstaller());
         }
     }
 }

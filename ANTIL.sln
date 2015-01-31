@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Domain", "ANTIL.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Server", "ANTIL.Server\ANTIL.Server.csproj", "{39D724E9-8D09-4827-B07F-01C0BF6B087A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandHandler", "CommandHandler\CommandHandler.csproj", "{85CEECB6-F41A-4E6E-834E-5C5E02313375}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39D724E9-8D09-4827-B07F-01C0BF6B087A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85CEECB6-F41A-4E6E-834E-5C5E02313375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85CEECB6-F41A-4E6E-834E-5C5E02313375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85CEECB6-F41A-4E6E-834E-5C5E02313375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85CEECB6-F41A-4E6E-834E-5C5E02313375}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

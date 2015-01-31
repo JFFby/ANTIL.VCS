@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\ANTIL.vCs\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -49,6 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CastleWndsor\WindsorInstaller.cs" />
+    <Compile Include="Dao\Implementations\AntilFileDao.cs" />
+    <Compile Include="Dao\Implementations\Common\DataAccessObject.cs" />
+    <Compile Include="Dao\Implementations\Common\DataBaseTransaction.cs" />
+    <Compile Include="Dao\Implementations\Common\GenericDao.cs" />
+    <Compile Include="Dao\Interfaces\Common\IDataBaseTransaction.cs" />
+    <Compile Include="Dao\Interfaces\IAntilFileDao.cs" />
+    <Compile Include="Dao\Interfaces\Common\IGenericDao.cs" />
+    <Compile Include="Dao\Interfaces\Common\IDataAccessObject.cs" />
     <Compile Include="Entities\AntilFile.cs" />
     <Compile Include="Entities\Common\DomainObject.cs" />
     <Compile Include="Entities\Common\EditableDomainObject.cs" />
@@ -69,8 +84,9 @@
     <EmbeddedResource Include="Mapping\AntilFile.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="SQL\File.sql" />
+    <Content Include="SQL\Tables\File\CREATE_File.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 using CommandHandler.Commands.Common;
 
 namespace CommandHandler.Commands.Cd
@@ -22,7 +25,11 @@ namespace CommandHandler.Commands.Cd
             var dir = new DirectoryInfo(path);
             if (dir.Exists)
             {
+                var antilPath = "ANTIL.xml";
                 WriteLine("You are in " + dir.FullName + " now", ConsoleColor.Green);
+                var doc = XDocument.Load(antilPath);
+                doc.Element("Cd").Attribute("path").SetValue(dir.FullName);
+                doc.Save(antilPath);
             }
             else
             {

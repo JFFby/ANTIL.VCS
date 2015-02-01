@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
+using System.Xml.Schema;
 using CommandHandler.Commands.Exit;
 
 namespace CommandHandler
@@ -22,11 +26,14 @@ namespace CommandHandler
 
         public void Run()
         {
+            var antilStore = InitAntilStore();
+
             WriteLine("Hello, I'm ANTIL and I'm Version Control System");
             WriteLine("Use 'help' command to see all my features :)");
             do
             {
-                Console.Write("> ");
+                var cd = GetCd(antilStore);
+                Console.Write(cd + " > ");
                 var command = Console.ReadLine();
 
                 ExecuteMethod(command);
@@ -52,7 +59,7 @@ namespace CommandHandler
             };
         }
 
-        public void ExecuteMethod(string command)
+        private void ExecuteMethod(string command)
         {
             var comandItem = ParseCommand(command);
 
@@ -60,7 +67,7 @@ namespace CommandHandler
                 return;
 
             MethodInfo methodInfo = controller.GetType().GetMethod(comandItem.Commant);
-            if (methodInfo != null)
+            if (methodInfo != null && methodInfo.IsPublic)
             {
                 methodInfo.Invoke(controller, comandItem.Args);
             }
@@ -91,6 +98,54 @@ namespace CommandHandler
                     command[0].ToString().ToUpper());
             else
                 return command;
+
+        }
+
+        private AntilStoreItem InitAntilStore()
+        {
+            string path = "ANTIL.xml";
+
+            var file = new FileInfo(path);
+            if (!file.Exists)
+            {
+                var document = new XDocument(
+                    new XElement("Cd", new XAttribute("path", string.Empty))
+                    );
+
+                document.Save(path);
+
+                return new AntilStoreItem
+                {
+                    Store = new FileInfo(path),
+                    Cd = string.Empty
+                };
+            }
+
+            string cd = XDocument.Load(path).Element("Cd").Attribute("path").Value;
+
+                return new AntilStoreItem
+            {
+                Store = file,
+                Cd = cd 
+            };
+        }
+
+        private string GetCd(AntilStoreItem item)
+        {
+            var path = "ANTIL.xml";
+            var cd = string.Empty;
+            var newFileRevision = new FileInfo(path);
+
+            if (newFileRevision.LastWriteTime == item.Store.LastWriteTime)
+                cd = item.Cd;
+            else
+            {
+                cd = XDocument.Load(path).Element("Cd").Attribute("path").Value;
+                item.Store = newFileRevision;
+            }
+
+            item.Cd = cd;
+            return cd;
 
         }
     }

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="CommandItem.cs" />
     <Compile Include="Commands\Cd\Cd.cs" />

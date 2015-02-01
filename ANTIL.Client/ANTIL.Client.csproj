@@ -11,6 +11,7 @@
     <AssemblyName>ANTIL.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,10 +57,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ANTIL.Domain\ANTIL.Domain.csproj">
-      <Project>{8cc33349-1019-48a5-b45c-3c03e19696e0}</Project>
-      <Name>ANTIL.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CommandHandler\CommandHandler.csproj">
       <Project>{85ceecb6-f41a-4e6e-834e-5c5e02313375}</Project>
       <Name>CommandHandler</Name>

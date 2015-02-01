@@ -9,14 +9,13 @@ namespace CommandHandler.Commands.Exit
     {
         public void Execute(ICollection<string> args)
         {
-            Write("Bye");
-            for (int i = 0; i < 3; ++i)
+            ch.Write("Bye");
+            for (int i = 0; i < 4; ++i)
             {
                 Thread.Sleep(300);
                 Console.Write(".");
             }
-            Thread.Sleep(700);
-       //     Environment.Exit(0);
+            Environment.Exit(0);
         }
     }
 }

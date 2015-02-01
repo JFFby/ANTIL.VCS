@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using CommandHandler.Commands.Common;
 
@@ -13,12 +11,23 @@ namespace CommandHandler.Commands.Cd
     {
         public void Execute(ICollection<string> args)
         {
+            if (args.Count > 0 && CommandHandlerHelper.IsMethodExist(this, args.ToList()[0]))
+            {
+                CommandHandlerHelper.ExecuteMethod(this, args);
+                return;
+            }
+
+            ExrcuteCdCommandWithOutArgs(args);
+        }
+
+        private void ExrcuteCdCommandWithOutArgs(ICollection<string> args)
+        {
             var path = string.Empty;
             if (args.Count > 0 && args.ToList()[0].Length > 0)
                 path = args.ToList()[0];
             else
             {
-                WriteLine("Bad arguments",ConsoleColor.Red);
+                ch.WriteLine("Bad arguments", ConsoleColor.Red);
                 return;
             }
 
@@ -26,15 +35,27 @@ namespace CommandHandler.Commands.Cd
             if (dir.Exists)
             {
                 var antilPath = "ANTIL.xml";
-                WriteLine("You are in " + dir.FullName + " now", ConsoleColor.Green);
+                ch.WriteLine("You are in " + dir.FullName + " now", ConsoleColor.Green);
                 var doc = XDocument.Load(antilPath);
                 doc.Element("Cd").Attribute("path").SetValue(dir.FullName);
                 doc.Save(antilPath);
             }
             else
             {
-                WriteLine("Folder does not exist",ConsoleColor.Red);
+                ch.WriteLine("Folder does not exist", ConsoleColor.Red);
             }
         }
+
+        public void Clear(ICollection<string> args)
+        {
+            var antilPath = "ANTIL.xml";
+            var doc = XDocument.Load(antilPath);
+            doc.Element("Cd").Attribute("path").SetValue(string.Empty);
+            doc.Save(antilPath);
+
+            ch.WriteLine("Current location is clear", ConsoleColor.Green);
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommandHandler.Commands.Common;
 
 namespace CommandHandler.Commands.Help
@@ -7,9 +8,14 @@ namespace CommandHandler.Commands.Help
     {
         public void Execute(ICollection<string> args)
         {
-            WriteLine("Avaliable commands:\n");
-            WriteLine("1) exit      - Exit from app");
-            WriteLine("2) cd [path] - Go to the some directory");
+            Console.WriteLine("\n");
+            ch.WriteLine("Parametrs: [require], <optional>");
+            ch.WriteLine("Avaliable commands:\n");
+            ch.WriteLine("1) exit      - Exit from app");
+            ch.WriteLine("2) cd        - Go to the some directory");
+            ch.WriteLine("\t\t[path]     - Path");
+            ch.WriteLine("\t\t<clear>    - Clear current path");
+            Console.WriteLine("\n");
         }
     }
 }

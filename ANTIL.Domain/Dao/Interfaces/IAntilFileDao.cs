@@ -1,5 +1,5 @@
-﻿using ANTIL.Domain.Dao.Interfaces.Common;
-using ANTIL.Domain.Entities;
+﻿using ANTIL.Domain.Core.Entities;
+using ANTIL.Domain.Dao.Interfaces.Common;
 
 namespace ANTIL.Domain.Dao.Interfaces
 {

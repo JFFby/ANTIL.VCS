@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using ANTIL.Domain.CastleWndsor;
+using ANTIL.Domain.Core.Entities;
 using ANTIL.Domain.Dao.Interfaces;
-using ANTIL.Domain.Entities;
 using Castle.Windsor;
 
 namespace ANTIL.Server

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ANTIL.Domain.Core.Entities.Common;
 using ANTIL.Domain.Dao.Interfaces.Common;
-using ANTIL.Domain.Entities.Common;
 
 namespace ANTIL.Domain.Dao.Implementations.Common
 {

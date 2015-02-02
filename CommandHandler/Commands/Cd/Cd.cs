@@ -9,11 +9,18 @@ namespace CommandHandler.Commands.Cd
 {
     public class Cd : BaseCommand, ICd
     {
+        private readonly CommandHandlerHelper cmdHelper;
+
+        public Cd(CommandHandlerHelper cmdHelper)
+        {
+            this.cmdHelper = cmdHelper;
+        }
+
         public void Execute(ICollection<string> args)
         {
-            if (args.Count > 0 && CommandHandlerHelper.IsMethodExist(this, args.ToList()[0]))
+            if (args.Count > 0 && cmdHelper.IsMethodExist(this, args.ToList()[0]))
             {
-                CommandHandlerHelper.ExecuteMethod(this, args);
+                cmdHelper.ExecuteMethod(this, args);
                 return;
             }
 

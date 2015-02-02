@@ -1,7 +1,7 @@
-﻿using ANTIL.Domain.Dao.Implementations.Common;
+﻿using ANTIL.Domain.Core.Entities;
+using ANTIL.Domain.Dao.Implementations.Common;
 using ANTIL.Domain.Dao.Interfaces;
 using ANTIL.Domain.Dao.Interfaces.Common;
-using ANTIL.Domain.Entities;
 
 namespace ANTIL.Domain.Dao.Implementations
 {

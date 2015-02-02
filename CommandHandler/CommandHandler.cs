@@ -13,10 +13,12 @@ namespace CommandHandler
     {
         private readonly Controller controller;
         private readonly ConsoleHelper ch;
+        private readonly CommandHandlerHelper cmdHelper;
 
-        public CommandHandler(Controller controller)
+        public CommandHandler(Controller controller, CommandHandlerHelper cmdHelper)
         {
             this.controller = controller;
+            this.cmdHelper = cmdHelper;
             this.ch = new ConsoleHelper();
         }
 
@@ -32,7 +34,7 @@ namespace CommandHandler
                 Console.Write(cd + " > ");
                 var command = Console.ReadLine();
 
-                CommandHandlerHelper.ExecuteMethod(controller,command);
+                cmdHelper.ExecuteMethod(controller, command);
 
             } while (true);
 

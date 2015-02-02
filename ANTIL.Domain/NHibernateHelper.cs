@@ -1,4 +1,4 @@
-﻿using ANTIL.Domain.Entities.Common;
+﻿using ANTIL.Domain.Core.Entities.Common;
 using NHibernate;
 using NHibernate.Cfg;
 

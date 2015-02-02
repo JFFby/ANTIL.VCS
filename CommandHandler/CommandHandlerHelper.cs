@@ -5,10 +5,10 @@ using System.Reflection;
 
 namespace CommandHandler
 {
-    public static class CommandHandlerHelper
+    public class CommandHandlerHelper
     {
 
-        public static bool ExecuteMethod(object methodHandler, string command)
+        public bool ExecuteMethod(object methodHandler, string command)
         {
             var comandItem = ParseCommand(command);
 
@@ -18,18 +18,18 @@ namespace CommandHandler
             return Execute(methodHandler, comandItem.Commant, comandItem.Args);
         }
 
-        public static bool ExecuteMethod(object methodHandler, ICollection<string> commandLine)
+        public bool ExecuteMethod(object methodHandler, ICollection<string> commandLine)
         {
             var commandItem = ParseCommand(commandLine);
             return Execute(methodHandler, commandItem.Commant, commandItem.Args);
         }
 
-        public static bool IsMethodExist(object methodHandler, string method)
+        public bool IsMethodExist(object methodHandler, string method)
         {
             return methodHandler.GetType().GetMethod(ProcessCommand(method)) != null;
         }
 
-        private static CommandItem ParseCommand(ICollection<string> command)
+        private CommandItem ParseCommand(ICollection<string> command)
         {
             var args = new List<string>();
 
@@ -45,7 +45,7 @@ namespace CommandHandler
             };
         }
 
-        private static CommandItem ParseCommand(string command)
+        private CommandItem ParseCommand(string command)
         {
             string[] commandArgs = command.Split(' ');
             var args = new List<string>();
@@ -62,7 +62,7 @@ namespace CommandHandler
             };
         }
 
-        private static string ProcessCommand(string command)
+        private string ProcessCommand(string command)
         {
             if (command.Length > 0)
                 return command.ToLower().Replace(command[0].ToString(),

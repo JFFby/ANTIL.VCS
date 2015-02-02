@@ -1,6 +1,6 @@
-﻿using ANTIL.Domain.Entities.Common;
+﻿using ANTIL.Domain.Core.Entities.Common;
 
-namespace ANTIL.Domain.Entities
+namespace ANTIL.Domain.Core.Entities
 {
     public class AntilFile : EditableDomainObject
     {

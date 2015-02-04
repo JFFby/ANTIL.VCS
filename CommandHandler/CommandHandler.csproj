@@ -52,6 +52,8 @@
     <Compile Include="Commands\Cd\Cd.cs" />
     <Compile Include="Commands\Common\BaseCommand.cs" />
     <Compile Include="Commands\Common\IANTILCommand.cs" />
+    <Compile Include="Commands\Dir\DirCommand.cs" />
+    <Compile Include="Commands\Dir\IDirCommand.cs" />
     <Compile Include="Commands\Exit\ExitCommand.cs" />
     <Compile Include="Commands\Exit\IExitCommand.cs" />
     <Compile Include="Commands\Help\HelpCommand.cs" />

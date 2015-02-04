@@ -49,15 +49,27 @@ namespace CommandHandler
         {
             string[] commandArgs = command.Split(' ');
             var args = new List<string>();
+            var cmd = string.Empty;
 
-            for (int i = 1; i < commandArgs.Length; ++i)
+            for (int i = 0; i < commandArgs.Length; ++i)
             {
-                args.Add(commandArgs[i]);
+                if (commandArgs[i] != string.Empty)
+                {
+                    cmd = commandArgs[i];
+
+                    for (int j = i + 1; j < commandArgs.Length; j++)
+                    {
+                        if (commandArgs[j] != string.Empty)
+                            args.Add(commandArgs[j]);
+                    }
+
+                    break;
+                }
             }
 
             return new CommandItem
             {
-                Commant = ProcessCommand(commandArgs[0]),
+                Commant = ProcessCommand(cmd),
                 Args = new object[] { args }
             };
         }
@@ -83,7 +95,7 @@ namespace CommandHandler
             else
             {
                 var ch = new ConsoleHelper();
-                ch.WriteLine("I don't know this command.",ConsoleColor.Red);
+                ch.WriteLine("I don't know this command.", ConsoleColor.Red);
             }
 
             return result;

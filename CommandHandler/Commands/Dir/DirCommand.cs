@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml.Linq;
+using System.Linq;
 using CommandHandler.Commands.Common;
+using CommandHandler.Helpers;
 
-namespace CommandHandler.Commands.Dir 
+namespace CommandHandler.Commands.Dir
 {
     public class DirCommand : BaseCommand, IDirCommand
     {
+        private readonly AntilStorageHelper storageHelper;
+
+        public DirCommand(AntilStorageHelper storageHelper)
+        {
+            this.storageHelper = storageHelper;
+        }
+
         public void Execute(ICollection<string> args)
         {
-            var antilPath = "ANTIL.xml";
-            var doc = XDocument.Load(antilPath);
-            var path = doc.Element("Cd").Attribute("path").Value;
+            var path = storageHelper.GetCdPath();
 
             if (path != string.Empty)
             {
@@ -22,14 +28,18 @@ namespace CommandHandler.Commands.Dir
                 {
                     int f = 0, d = 0;
                     Console.WriteLine(" ");
-                    ch.WriteLine("Directories: ");
+
+                    if (dir.GetDirectories().Count() > 1)
+                        ch.WriteLine("Directories: ");
                     foreach (var subDir in dir.GetDirectories())
                     {
-                       ch.WriteLine(" + " + subDir.Name);
+                        ch.WriteLine(" + " + subDir.Name);
                         ++d;
                     }
 
-                    ch.WriteLine("Files:");
+                    if (dir.GetFiles().Count() > 1)
+                        ch.WriteLine("Files:");
+
                     foreach (var file in dir.GetFiles())
                     {
                         ch.WriteLine("   " + file.Name);
@@ -43,7 +53,7 @@ namespace CommandHandler.Commands.Dir
                 }
             }
 
-            ch.WriteLine("Some error",ConsoleColor.Red);
+            ch.WriteLine("Some error", ConsoleColor.Red);
         }
     }
 }

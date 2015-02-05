@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandHandler
+namespace CommandHandler.Helpers
 {
     public class ConsoleHelper
     {

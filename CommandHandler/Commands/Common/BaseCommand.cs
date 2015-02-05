@@ -1,4 +1,6 @@
-﻿namespace CommandHandler.Commands.Common
+﻿using CommandHandler.Helpers;
+
+namespace CommandHandler.Commands.Common
 {
     public class BaseCommand
     {

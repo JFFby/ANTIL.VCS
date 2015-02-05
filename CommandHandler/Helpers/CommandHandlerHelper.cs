@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
-namespace CommandHandler
+namespace CommandHandler.Helpers
 {
     public class CommandHandlerHelper
     {
@@ -77,8 +78,11 @@ namespace CommandHandler
         private string ProcessCommand(string command)
         {
             if (command.Length > 0)
-                return command.ToLower().Replace(command[0].ToString(),
-                    command[0].ToString().ToUpper());
+            {
+                var charSet = command.ToCharArray();
+                charSet[0] = charSet[0].ToString().ToUpper().ToCharArray()[0];
+                return new string(charSet);
+            }
             else
                 return command;
         }

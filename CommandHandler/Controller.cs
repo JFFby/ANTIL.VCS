@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using CommandHandler.Commands.Cd;
 using CommandHandler.Commands.Dir;
 using CommandHandler.Commands.Exit;
 using CommandHandler.Commands.Help;
+using CommandHandler.Commands.Init;
 
 namespace CommandHandler
 {
@@ -20,13 +19,19 @@ namespace CommandHandler
         private readonly IHelpCommand helpCommand;
         private readonly ICd cd;
         private readonly IDirCommand dirCommand;
+        private readonly IInit initComman;
 
-        public Controller(IExitCommand exitCommand, IHelpCommand helpCommand, ICd cd, IDirCommand dirCommand)
+        public Controller(IExitCommand exitCommand,
+            IHelpCommand helpCommand,
+            ICd cd,
+            IDirCommand dirCommand,
+            IInit initComman)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
             this.cd = cd;
             this.dirCommand = dirCommand;
+            this.initComman = initComman;
         }
 
         public void Exit(ICollection<string> args)
@@ -47,6 +52,11 @@ namespace CommandHandler
         public void Dir(ICollection<string> args)
         {
             dirCommand.Execute(args);
+        }
+
+        public void Init(ICollection<string> args)
+        {
+            initComman.Execute(args);
         }
     }
 }

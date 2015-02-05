@@ -2,6 +2,7 @@
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using CommandHandler.Commands.Common;
+using CommandHandler.Helpers;
 
 namespace CommandHandler
 {
@@ -14,6 +15,7 @@ namespace CommandHandler
             container.Register(Component.For<CommandHandler>().LifestyleTransient());
             container.Register(Component.For<Controller>().LifestyleTransient());
             container.Register(Component.For<CommandHandlerHelper>());
+            container.Register(Component.For<AntilStorageHelper>());
         }
     }
 }

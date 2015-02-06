@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CommandHandler.Commands.Common;
@@ -10,34 +11,25 @@ namespace CommandHandler.Commands.Init
     public class InitCommand : BaseCommand, IInitCommand
     {
         private readonly AntilStorageHelper storageHelper;
+        private readonly RepositoryXMLHelper repositoryHelper;
         private const string subPath = ".ANTIL";
         private string cdPath;
 
-        public InitCommand(AntilStorageHelper storageHelper)
+        public InitCommand(AntilStorageHelper storageHelper, RepositoryXMLHelper repositoryHelper)
         {
             this.storageHelper = storageHelper;
+            this.repositoryHelper = repositoryHelper;
             cdPath = storageHelper.GetCdPath();
         }
 
         public void Execute(ICollection<string> args)
         {
-            var dir = new DirectoryInfo(cdPath);
+            var dir = CreateRepositoryCatalog();
 
-            if(!IsValidData(dir))
+            if (dir == null)
                 return;
 
-            try
-            {
-                dir.CreateSubdirectory(subPath);
-                var antilDir = new DirectoryInfo(cdPath + subPath);
-                antilDir.Attributes = FileAttributes.Hidden;
-            }
-            catch (Exception ex)
-            {
-                ch.WriteLine(ex.Message,ConsoleColor.Red);
-            }
-
-            ch.WriteLine("Repository was nitialized",ConsoleColor.Green);
+            repositoryHelper.CreateRepoStorage(dir.FullName, args);
         }
 
         private bool IsValidData(DirectoryInfo dir)
@@ -56,6 +48,30 @@ namespace CommandHandler.Commands.Init
             }
 
             return true;
+        }
+
+        private DirectoryInfo CreateRepositoryCatalog()
+        {
+            var dir = new DirectoryInfo(cdPath);
+
+            if (!IsValidData(dir))
+                return null;
+
+            DirectoryInfo antilDir = null; 
+            try
+            {
+                dir.CreateSubdirectory(subPath);
+                antilDir = new DirectoryInfo(cdPath + subPath);
+                antilDir.Attributes = FileAttributes.Hidden;
+            }
+            catch (Exception ex)
+            {
+                ch.WriteLine(ex.Message, ConsoleColor.Red);
+            }
+
+            ch.WriteLine("Repository was nitialized", ConsoleColor.Green);
+
+            return antilDir ;
         }
     }
 }

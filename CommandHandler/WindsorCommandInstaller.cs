@@ -16,6 +16,7 @@ namespace CommandHandler
             container.Register(Component.For<Controller>().LifestyleTransient());
             container.Register(Component.For<CommandHandlerHelper>());
             container.Register(Component.For<AntilStorageHelper>());
+            container.Register(Component.For<RepositoryXMLHelper>());
         }
     }
 }

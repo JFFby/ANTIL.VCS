@@ -4,6 +4,7 @@ using CommandHandler.Commands.Dir;
 using CommandHandler.Commands.Exit;
 using CommandHandler.Commands.Help;
 using CommandHandler.Commands.Init;
+using CommandHandler.Commands.Status;
 
 namespace CommandHandler
 {
@@ -17,21 +18,24 @@ namespace CommandHandler
     {
         private readonly IExitCommand exitCommand;
         private readonly IHelpCommand helpCommand;
-        private readonly ICd cd;
+        private readonly ICd cdCommand;
         private readonly IDirCommand dirCommand;
-        private readonly IInit initComman;
+        private readonly IInitCommand initComman;
+        private readonly IStatusCommand statusCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
-            ICd cd,
+            ICd cdCommand,
             IDirCommand dirCommand,
-            IInit initComman)
+            IInitCommand initComman,
+            IStatusCommand statusCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
-            this.cd = cd;
+            this.cdCommand = cdCommand;
             this.dirCommand = dirCommand;
             this.initComman = initComman;
+            this.statusCommand = statusCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -46,7 +50,7 @@ namespace CommandHandler
 
         public void Cd(ICollection<string> args)
         {
-            cd.Execute(args);
+            cdCommand.Execute(args);
         }
 
         public void Dir(ICollection<string> args)
@@ -57,6 +61,11 @@ namespace CommandHandler
         public void Init(ICollection<string> args)
         {
             initComman.Execute(args);
+        }
+
+        public void Status(ICollection<string> args)
+        {
+            statusCommand.Execute(args);
         }
     }
 }

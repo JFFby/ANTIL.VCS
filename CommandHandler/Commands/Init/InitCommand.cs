@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CommandHandler.Commands.Common;
@@ -8,13 +7,13 @@ using CommandHandler.Helpers;
 
 namespace CommandHandler.Commands.Init
 {
-    public class Init : BaseCommand, IInit
+    public class InitCommand : BaseCommand, IInitCommand
     {
         private readonly AntilStorageHelper storageHelper;
         private const string subPath = ".ANTIL";
         private string cdPath;
 
-        public Init(AntilStorageHelper storageHelper)
+        public InitCommand(AntilStorageHelper storageHelper)
         {
             this.storageHelper = storageHelper;
             cdPath = storageHelper.GetCdPath();
@@ -29,9 +28,8 @@ namespace CommandHandler.Commands.Init
 
             try
             {
-                var splitter = cdPath.ToCharArray()[cdPath.Length -1].ToString() == "\\" ? string.Empty  : "\\";
                 dir.CreateSubdirectory(subPath);
-                var antilDir = new DirectoryInfo(cdPath + splitter + subPath);
+                var antilDir = new DirectoryInfo(cdPath + subPath);
                 antilDir.Attributes = FileAttributes.Hidden;
             }
             catch (Exception ex)

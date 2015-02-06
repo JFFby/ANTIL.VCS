@@ -2,7 +2,7 @@
 
 namespace CommandHandler.Commands.Init
 {
-    public interface IInit : IANTILCommand 
+    public interface IInitCommand : IANTILCommand 
     {
     }
 }

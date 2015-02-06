@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Commands\Status\IStatusCommand.cs" />
+    <Compile Include="Commands\Status\StatusCommand.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />
     <Compile Include="Helpers\CommandHandlerHelper.cs" />
     <Compile Include="CommandItem.cs" />
@@ -60,8 +62,8 @@
     <Compile Include="Commands\Help\HelpCommand.cs" />
     <Compile Include="Commands\Help\IHelpCommand.cs" />
     <Compile Include="Commands\Cd\ICd.cs" />
-    <Compile Include="Commands\Init\IInit.cs" />
-    <Compile Include="Commands\Init\Init.cs" />
+    <Compile Include="Commands\Init\IInitCommand.cs" />
+    <Compile Include="Commands\Init\InitCommand.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

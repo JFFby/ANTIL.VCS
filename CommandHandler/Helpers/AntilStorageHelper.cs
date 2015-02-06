@@ -51,8 +51,9 @@ namespace CommandHandler.Helpers
 
         public void SetCd(string value)
         {
+            var splitter = value.ToCharArray()[value.Length - 1].ToString() == "\\" ? string.Empty : "\\";
             var doc = XDocument.Load(storagePath);
-            doc.Element("Cd").Attribute("path").SetValue(value);
+            doc.Element("Cd").Attribute("path").SetValue(value + splitter);
             doc.Save(storagePath);
         }
 

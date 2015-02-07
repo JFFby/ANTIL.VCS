@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -12,10 +11,16 @@ namespace CommandHandler.Helpers
         public void CreateRepoStorage(string path, ICollection<string> args)
         {
             var projName = ProcessProjectName(path, args);
-            var subDirs = GetDirs(path);
+            var files = GetFiles(path);
 
-            var doc = new XDocument(new XElement("AntilProject", new XAttribute("name",projName)
-                ));
+            var doc = new XDocument(new XElement("AntilProject",new XAttribute("name",projName),
+              files.Select(f => new XElement("File",
+                  new XElement("name", f.Name), 
+                  new XElement("path",f.DirectoryName),
+                  new XElement("lwt", f.LastWriteTime),
+                  new XElement("directory",f.Directory.Name),
+                  new XElement("lenght",f.Length)))
+            ));
             doc.Save(path + "//" + storageName);
         }
 
@@ -30,10 +35,23 @@ namespace CommandHandler.Helpers
             return argsArray[argsArray.Length - 2];
         }
 
-        private IEnumerable<DirectoryInfo> GetDirs(string path)
+        private IEnumerable<FileInfo> GetFiles(string path)
         {
-            var dir = new DirectoryInfo(path.Replace(".ANTIL", ""));
-            return CollectDirs(new List<DirectoryInfo>(), dir.GetDirectories().Where(x => x.Name != ".ANTIL")).ToList();
+            var directory = new DirectoryInfo(path.Replace(".ANTIL", ""));
+            var dirs = GetDirs(directory);
+            var files = new List<FileInfo>(directory.GetFiles());
+            foreach (var dir in dirs)
+            {
+                files.AddRange(dir.GetFiles());
+            }
+
+            return files;
+        }  
+
+        private IEnumerable<DirectoryInfo> GetDirs(DirectoryInfo dir)
+        {
+           
+            return CollectDirs(new List<DirectoryInfo>(), dir.GetDirectories().Where(x => x.Name != ".ANTIL"));
         }
 
         private IEnumerable<DirectoryInfo> CollectDirs(List<DirectoryInfo> collectedDirs ,IEnumerable<DirectoryInfo> dirs)

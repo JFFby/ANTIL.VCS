@@ -33,14 +33,23 @@ namespace CommandHandler
             ch.WriteLine("Use 'help' command to see all my features :)");
             do
             {
-                var cd = storageHelper.GetCdPath(antilStore);
-                Console.Write(cd + " > ");
+                ConsoleWrite(antilStore);
                 var command = Console.ReadLine();
 
                 cmdHelper.ExecuteMethod(controller, command);
 
             } while (true);
 
+        }
+
+        private void ConsoleWrite(AntilStoreItem antilStore)
+        {
+            var storeItem = storageHelper.GetCdPath(antilStore);
+            Console.Write(storeItem.Cd);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(storeItem.ProjectName);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write(" > ");
         }
     }
 }

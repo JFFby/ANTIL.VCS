@@ -19,17 +19,18 @@ namespace CommandHandler.Commands.Init
         {
             this.storageHelper = storageHelper;
             this.repositoryHelper = repositoryHelper;
-            cdPath = storageHelper.GetCdPath();
         }
 
         public void Execute(ICollection<string> args)
         {
+            cdPath = storageHelper.GetCdPath();
             var dir = CreateRepositoryCatalog();
 
             if (dir == null)
                 return;
 
-            repositoryHelper.CreateRepoStorage(dir.FullName, args);
+            var projName = repositoryHelper.CreateRepoStorage(dir.FullName, args);
+            storageHelper.AddProject(dir.FullName.Replace(subPath,""),projName);
         }
 
         private bool IsValidData(DirectoryInfo dir)

@@ -15,6 +15,9 @@ namespace CommandHandler.Commands.Help
             ch.WriteLine("2) cd        - Go to the some directory");
             ch.WriteLine("\t\t[path]     - Path");
             ch.WriteLine("\t\t<clear>    - Clear current path");
+            ch.WriteLine("3) dir       - List of folders and files contained in the current folder");
+            ch.WriteLine("3) init      - Initialize ANTIL repository in current directory");
+            ch.WriteLine("\t\t<...>      - Project name");
             Console.WriteLine("\n");
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommandHandler.Commands.Common;
 
 namespace CommandHandler.Commands.Status
@@ -8,7 +7,7 @@ namespace CommandHandler.Commands.Status
     {
         public void Execute(ICollection<string> args)
         {
-            ch.WriteLine("Not implemented yet",ConsoleColor.Red);
+            
         }
     }
 }

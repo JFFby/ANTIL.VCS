@@ -8,7 +8,7 @@ namespace CommandHandler.Helpers
     public class RepositoryXMLHelper
     {
         private readonly string storageName = "AntilProject.xml";
-        public void CreateRepoStorage(string path, ICollection<string> args)
+        public string CreateRepoStorage(string path, ICollection<string> args)
         {
             var projName = ProcessProjectName(path, args);
             var files = GetFiles(path);
@@ -22,6 +22,8 @@ namespace CommandHandler.Helpers
                   new XElement("lenght",f.Length)))
             ));
             doc.Save(path + "//" + storageName);
+
+            return projName;
         }
 
         private string ProcessProjectName(string path,ICollection<string> args)

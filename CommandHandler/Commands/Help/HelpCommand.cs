@@ -13,11 +13,13 @@ namespace CommandHandler.Commands.Help
             ch.WriteLine("Avaliable commands:\n");
             ch.WriteLine("1) exit      - Exit from app");
             ch.WriteLine("2) cd        - Go to the some directory");
-            ch.WriteLine("\t\t[path]     - Path");
+            ch.WriteLine("\t\t[path] | [project [project name]]    - Path");
+            ch.WriteLine("\t\t");
             ch.WriteLine("\t\t<clear>    - Clear current path");
             ch.WriteLine("3) dir       - List of folders and files contained in the current folder");
-            ch.WriteLine("3) init      - Initialize ANTIL repository in current directory");
+            ch.WriteLine("4) init      - Initialize ANTIL repository in current directory");
             ch.WriteLine("\t\t<...>      - Project name");
+            ch.WriteLine("5) list      - List of existing repositories");
             Console.WriteLine("\n");
         }
     }

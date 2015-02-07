@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -70,7 +71,9 @@ namespace CommandHandler.Helpers
 
         public void SetCd(string value)
         {
-            var splitter = value.ToCharArray()[value.Length - 1].ToString() == "\\" ? string.Empty : "\\";
+             var splitter = String.Empty;
+            if(value != string.Empty)
+            splitter = value.ToCharArray()[value.Length - 1].ToString() == "\\" ? string.Empty : "\\";
             var doc = XDocument.Load(storagePath);
             doc.Root.Element("Cd").Attribute("path").SetValue(value + splitter);
             doc.Save(storagePath);
@@ -96,7 +99,7 @@ namespace CommandHandler.Helpers
             return string.Empty;
         }
 
-        private IEnumerable<AntilProject> GetProjects()
+        public IEnumerable<AntilProject> GetProjects()
         {
            var xElement =  XDocument.Load(storagePath).Root.Element("Projects");
                 if (xElement != null)

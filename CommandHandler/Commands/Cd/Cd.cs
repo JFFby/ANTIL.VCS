@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
 
@@ -59,6 +58,25 @@ namespace CommandHandler.Commands.Cd
             ch.WriteLine("Current location is clear", ConsoleColor.Green);
         }
 
+        public void Project(ICollection<string> args)
+        {
+            if (!(args.Count > 0))
+            {
+                ch.WriteLine("Enter project name",ConsoleColor.Red);
+                return;
+            }
 
+            foreach (var project in storageHelper.GetProjects())
+            {
+                if (project.Name == args.ToList()[0])
+                {
+                    storageHelper.SetCd(project.Path);
+                    ch.WriteLine("You are in "+project.Name +" repository now",ConsoleColor.Green);
+                    return;
+                }
+            }
+
+            ch.WriteLine("This project doesn't exist",ConsoleColor.Red);
+        }
     }
 }

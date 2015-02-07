@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="Commands\List\IListCommand.cs" />
+    <Compile Include="Commands\List\ListCommand.cs" />
     <Compile Include="Commands\Status\IStatusCommand.cs" />
     <Compile Include="Commands\Status\StatusCommand.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />

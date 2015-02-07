@@ -45,15 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AntilStoreItem.cs" />
+    <Compile Include="Entites\AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\List\IListCommand.cs" />
     <Compile Include="Commands\List\ListCommand.cs" />
     <Compile Include="Commands\Status\IStatusCommand.cs" />
     <Compile Include="Commands\Status\StatusCommand.cs" />
+    <Compile Include="Entites\AntilProject.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />
     <Compile Include="Helpers\CommandHandlerHelper.cs" />
-    <Compile Include="CommandItem.cs" />
+    <Compile Include="Entites\CommandItem.cs" />
     <Compile Include="Commands\Cd\Cd.cs" />
     <Compile Include="Commands\Common\BaseCommand.cs" />
     <Compile Include="Commands\Common\IANTILCommand.cs" />

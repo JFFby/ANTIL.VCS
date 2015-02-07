@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
-using Castle.Core.Resource;
+using CommandHandler.Entites;
 
 namespace CommandHandler.Helpers
 {
@@ -120,10 +119,4 @@ namespace CommandHandler.Helpers
             return new List<AntilProject>();
         }
     }
-}
-
-public class AntilProject
-{
-    public string Name { get; set; }
-    public string Path { get;set; }
 }

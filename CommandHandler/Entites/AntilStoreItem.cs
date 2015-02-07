@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace CommandHandler
+namespace CommandHandler.Entites
 {
     public class AntilStoreItem
     {

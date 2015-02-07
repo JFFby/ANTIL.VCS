@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CommandHandler
+﻿namespace CommandHandler.Entites
 {
     public class CommandItem
     {

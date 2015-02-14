@@ -8,6 +8,7 @@ using CommandHandler.Commands.List;
 using CommandHandler.Commands.Status;
 using CommandHandler.Commands.Register;
 using CommandHandler.Commands.LogIn;
+using CommandHandler.Commands.Add;
 
 namespace CommandHandler
 {
@@ -22,6 +23,7 @@ namespace CommandHandler
         private readonly IListCommand listCommand;
         private readonly IRegisterCommand registerCommand;
         private readonly ILoginCommand loginCommand;
+        private readonly IAddCommand addCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -31,7 +33,8 @@ namespace CommandHandler
             IStatusCommand statusCommand,
             IListCommand listCommand,
             IRegisterCommand registerCommand,
-            ILoginCommand logInCommand)
+            ILoginCommand logInCommand,
+            IAddCommand addCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -42,6 +45,7 @@ namespace CommandHandler
             this.listCommand = listCommand;
             this.registerCommand = registerCommand;
             this.loginCommand = logInCommand;
+            this.addCommand = addCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -87,6 +91,11 @@ namespace CommandHandler
         public void Login(ICollection<string> args)
         {
             loginCommand.Execute(args);
+        }
+
+        public void Add(ICollection<string> args)
+        {
+            addCommand.Execute(args);
         }
     }
 }

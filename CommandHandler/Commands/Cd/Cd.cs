@@ -33,7 +33,7 @@ namespace CommandHandler.Commands.Cd
         {
             var path = string.Empty;
             if (args.Count > 0 && args.ToList()[0].Length > 0)
-                path = args.ToList()[0];
+                path = string.Join(" ", args);
             else
             {
                 ch.WriteLine("Bad arguments", ConsoleColor.Red);

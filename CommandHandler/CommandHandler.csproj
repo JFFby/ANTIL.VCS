@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Add\AddCommand.cs" />
+    <Compile Include="Commands\Add\IAddCommand.cs" />
     <Compile Include="Commands\LogIn\ILoginCommand.cs" />
     <Compile Include="Commands\LogIn\LoginCommand.cs" />
     <Compile Include="Commands\Register\IRegisterCommand.cs" />

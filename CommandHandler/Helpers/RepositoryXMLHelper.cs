@@ -37,7 +37,7 @@ namespace CommandHandler.Helpers
             return argsArray[argsArray.Length - 2];
         }
 
-        private IEnumerable<FileInfo> GetFiles(string path)
+        public IEnumerable<FileInfo> GetFiles(string path)
         {
             var directory = new DirectoryInfo(path.Replace(".ANTIL", ""));
             var dirs = GetDirs(directory);

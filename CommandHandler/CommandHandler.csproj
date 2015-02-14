@@ -51,6 +51,8 @@
     <Compile Include="Commands\LogIn\LoginCommand.cs" />
     <Compile Include="Commands\Register\IRegisterCommand.cs" />
     <Compile Include="Commands\Register\RegisterCommand.cs" />
+    <Compile Include="Commands\Remove\IRemoveCommand.cs" />
+    <Compile Include="Commands\Remove\RemoveCommand.cs" />
     <Compile Include="Entites\AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\List\IListCommand.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Commands\Cd\ICd.cs" />
     <Compile Include="Commands\Init\IInitCommand.cs" />
     <Compile Include="Commands\Init\InitCommand.cs" />
+    <Compile Include="Helpers\CommitXmlHelper.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Helpers\RepositoryXMLHelper.cs" />

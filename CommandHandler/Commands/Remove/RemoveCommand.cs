@@ -5,18 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
-using CommandHandler.Entites;
 using System.Xml.Linq;
 using System.IO;
 
-namespace CommandHandler.Commands.Add
+namespace CommandHandler.Commands.Remove
 {
-    public class AddCommand : BaseCommand, IAddCommand
+    public class RemoveCommand : BaseCommand, IRemoveCommand
     {
-        private CommitXmlHelper commitHelper;
         private XDocument doc;
+        private CommitXmlHelper commitHelper;
 
-        public AddCommand(CommitXmlHelper commitHelper)
+        public RemoveCommand(CommitXmlHelper commitHelper)
         {
             this.commitHelper = commitHelper;
         }
@@ -38,16 +37,16 @@ namespace CommandHandler.Commands.Add
             }
             else if (args.ToArray()[0] == "-a")
             {
-                AddAllFiles();
+                RemoveAllFiles();
             }
             else
             {
                 FileInfo file = new FileInfo(commitHelper.Project.Path + args.ToArray()[0]);
                 if (file.Exists)
-                    AddFile(file);
+                    RemoveFile(file);
                 else
                 {
-                    ch.WriteLine("File does not exist!", ConsoleColor.Red);
+                    ch.WriteLine("There's no such file in commit!", ConsoleColor.Red);
                     return;
                 }
             }
@@ -55,31 +54,25 @@ namespace CommandHandler.Commands.Add
             doc.Save(commitHelper.Project.Path + ".ANTIL\\commit.xml");
         }
 
-        private void AddFile(FileInfo file)
+        private void RemoveFile(FileInfo file)
         {
-            foreach (var element in doc.Element("commit").Element("files").Elements("file"))
+            foreach (var element in doc.Element("commit").Element("files").Elements("file")
+                ?? new XElement[] { })
             {
                 if (element.Element("fullName").Value == file.FullName.ToString())
-                    if (element.Element("date").Value == file.LastWriteTime.ToString())
-                        return;
-                    else element.Remove();
+                {
+                    element.Remove();
+                    ch.WriteLine(string.Format("\t{0} was  removed from commit.", file.Name));
+                }
             }
-            doc.Element("commit").Element("files").Add(
-                new XElement("file",
-                    new XElement("fullName", file.FullName),
-                    new XElement("name", file.Name),
-                    new XElement("extention", file.Extension),
-                    new XElement("date", file.LastWriteTime.ToString())
-                ));
-            ch.WriteLine(string.Format("\t {0} was added", file.Name));
         }
 
-        private void AddAllFiles()
+        private void RemoveAllFiles()
         {
-            IEnumerable<FileInfo> files = commitHelper.GetFiles();
+            IEnumerable<FileInfo> files = commitHelper.GetFilesFromXml();
             foreach (var file in files)
             {
-                AddFile(file);
+                RemoveFile(file);
             }
         }
     }

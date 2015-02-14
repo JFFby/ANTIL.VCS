@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ANTIL.Server
 {
-    public class AntilServer
+    public class AntilServer : IDisposable
     {
         private readonly HttpListener listner;
 
@@ -41,5 +41,9 @@ namespace ANTIL.Server
             //cmdHendler.ExecuteMethod(context.Request.QueryString["cmd"]);
         }
 
+        public void Dispose()
+        {
+            listner.Stop();
+        }
     }
 }

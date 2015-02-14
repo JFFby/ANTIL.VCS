@@ -28,7 +28,7 @@ namespace ANTIL.Domain
         {
             var configuration = new Configuration();
             configuration.Configure();
-            configuration.AddAssembly(System.Reflection.Assembly.GetExecutingAssembly()); //typeof(DataAccessObject).Assembly
+            configuration.AddAssembly(System.Reflection.Assembly.GetExecutingAssembly());
             _sessionFactory = configuration.BuildSessionFactory();
         }
 

@@ -15,20 +15,20 @@ namespace HttpCommandHandler.Commands.Registration
 
         public void Execute(HttpListenerContext context)
         {
-            //var user = new User
-            //{
-            //    UserName = context.Request.Headers.Get("userName"),
-            //    Password = context.Request.Headers.Get("password")
-            //};
             var user = new User
             {
-                Password = "dima",
-                UserName = "dron"
+                UserName = context.Request.Headers.Get("userName"),
+                Password = context.Request.Headers.Get("password")
             };
 
             userDao.Save(user);
 
-            Console.WriteLine("User added");
+            Console.WriteLine("User was added");
+
+            var response = context.Response;
+            response.StatusCode = 200;
+            response.StatusDescription = "Ok";
+            context.Response.Close();
         }
     }
 }

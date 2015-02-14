@@ -1,6 +1,6 @@
 ﻿namespace HttpCommandHandler.Commands.Registration
 {
-    public interface IRegistration : IAntilHttpCommand
+    public interface IRegistrationCommand : IAntilHttpCommand
     {
     }
 }

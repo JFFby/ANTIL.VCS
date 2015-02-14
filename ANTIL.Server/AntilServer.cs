@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using HttpCommandHandler.Windsdor;
+using System.IO;
 
 namespace ANTIL.Server
 {
@@ -32,7 +33,12 @@ namespace ANTIL.Server
         {
             var request = context.Request;
             var cmdHendler = IOC.Resolve<HttpCommandHandler.HttpCommandHandler>();
-            cmdHendler.ExecuteMethod(context.Request.QueryString["cmd"]);
+            string command = request.Headers.Get("cmd");
+            byte[] file = new byte[request.ContentLength64];
+            request.InputStream.Read(file, 0, file.Length);
+            File.WriteAllBytes(@"E:\file.txt", file);
+            cmdHendler.ExecuteMethod(command);
+            //cmdHendler.ExecuteMethod(context.Request.QueryString["cmd"]);
         }
 
     }

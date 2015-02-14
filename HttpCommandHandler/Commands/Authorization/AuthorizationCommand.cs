@@ -24,7 +24,7 @@ namespace HttpCommandHandler.Commands.Authorization
                     var response = context.Response;
                     response.StatusCode = 200;
                     response.StatusDescription = "Ok";
-                    Console.WriteLine("User was autirize");
+                    Console.WriteLine("User was autirized");
                 }
                 else
                 {

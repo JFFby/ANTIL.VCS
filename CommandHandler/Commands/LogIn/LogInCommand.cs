@@ -28,7 +28,7 @@ namespace CommandHandler.Commands.LogIn
 
             while (userName.Length < 4)
             {
-                ch.WriteLine("Username must be at least 4 characters long.");
+                ch.WriteLine("Username must be at least 4 characters long.", ConsoleColor.Red);
                 userName = Console.ReadLine();
             }
 

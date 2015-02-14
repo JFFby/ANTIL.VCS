@@ -30,10 +30,10 @@ namespace CommandHandler.Commands.Register
 
             if (password == null)
                 return;
-<<<<<<< HEAD
+
             
             SendRegisterRequest();
-=======
+
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3300/");
             request.Headers.Add("cmd", "Registration");
@@ -46,7 +46,6 @@ namespace CommandHandler.Commands.Register
             else ch.WriteLine("Error! This username is taken.", ConsoleColor.Red);
             response.Close();
 
->>>>>>> origin/master
         }
 
         private string GetPassword()

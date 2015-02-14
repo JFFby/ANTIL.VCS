@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\IAntilHttpCommand.cs" />
+    <Compile Include="Commands\Registration\IRegistration.cs" />
+    <Compile Include="Commands\Registration\Registration.cs" />
     <Compile Include="HttpCommandHandler.cs" />
     <Compile Include="HttpController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

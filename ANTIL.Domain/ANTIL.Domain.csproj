@@ -60,10 +60,12 @@
     <Compile Include="Dao\Implementations\Common\DataAccessObject.cs" />
     <Compile Include="Dao\Implementations\Common\DataBaseTransaction.cs" />
     <Compile Include="Dao\Implementations\Common\GenericDao.cs" />
+    <Compile Include="Dao\Implementations\UserDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IDataBaseTransaction.cs" />
     <Compile Include="Dao\Interfaces\IAntilFileDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IGenericDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IDataAccessObject.cs" />
+    <Compile Include="Dao\Interfaces\IUserDao.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,10 +79,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Mapping\User.hbm.xml" />
+    <Content Include="SQL\Tables\File\File.sql" />
+    <Content Include="SQL\Tables\Users\Users.sql" />
     <EmbeddedResource Include="Mapping\AntilFile.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="SQL\Tables\File\CREATE_File.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ANTIL.Domain.Core\ANTIL.Domain.Core.csproj">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 
 namespace HttpCommandHandler
@@ -12,12 +13,13 @@ namespace HttpCommandHandler
             this.controller = controller;
         }
 
-        public void ExecuteMethod(string cmd)
+        public void ExecuteMethod(HttpListenerContext context)
         {
-            MethodInfo mi = controller.GetType().GetMethod(cmd);
+            //MethodInfo mi = controller.GetType().GetMethod(context.Request.Headers.Get("cmd"));
+            MethodInfo mi = controller.GetType().GetMethod(context.Request.QueryString["cmd"]);
             if (mi != null)
             {
-                mi.Invoke(controller, null);
+                mi.Invoke(controller, new object[] { context });
             }
             else
             {

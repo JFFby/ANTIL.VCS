@@ -4,11 +4,6 @@ using CommandHandler.Helpers;
 
 namespace CommandHandler
 {
-    /// <summary>
-    /// Думаю не имеет смысла реализовавывать у CommandHandler никаких интерфейсов ибо
-    /// мложно себе представить себе другую реализацию этого класса
-    /// З.Ы. как прочтёшь, удаляй
-    /// </summary>
     public class CommandHandler
     {
         private readonly Controller controller;

@@ -6,7 +6,7 @@ using CommandHandler.Commands.Help;
 using CommandHandler.Commands.Init;
 using CommandHandler.Commands.List;
 using CommandHandler.Commands.Status;
-using CommandHandler.Commands.Test;
+using CommandHandler.Commands.Register;
 
 namespace CommandHandler
 {
@@ -25,7 +25,7 @@ namespace CommandHandler
         private readonly IInitCommand initComman;
         private readonly IStatusCommand statusCommand;
         private readonly IListCommand listCommand;
-        private readonly ITestCommand testCommand;
+        private readonly IRegisterCommand registerCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -34,7 +34,7 @@ namespace CommandHandler
             IInitCommand initComman,
             IStatusCommand statusCommand,
             IListCommand listCommand,
-            ITestCommand testCommand)
+            IRegisterCommand registerCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -43,7 +43,7 @@ namespace CommandHandler
             this.initComman = initComman;
             this.statusCommand = statusCommand;
             this.listCommand = listCommand;
-            this.testCommand = testCommand;
+            this.registerCommand = registerCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -81,9 +81,9 @@ namespace CommandHandler
             listCommand.Execute(args);
         }
 
-        public void Test(ICollection<string> args)
+        public void Register(ICollection<string> args)
         {
-            testCommand.Execute(args);
+            registerCommand.Execute(args);
         }
     }
 }

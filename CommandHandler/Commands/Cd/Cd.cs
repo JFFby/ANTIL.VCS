@@ -26,10 +26,10 @@ namespace CommandHandler.Commands.Cd
                 return;
             }
 
-            ExrcuteCdCommandWithOutArgs(args);
+            ExecuteCdCommandWithOutArgs(args);
         }
 
-        private void ExrcuteCdCommandWithOutArgs(ICollection<string> args)
+        private void ExecuteCdCommandWithOutArgs(ICollection<string> args)
         {
             var path = string.Empty;
             if (args.Count > 0 && args.ToList()[0].Length > 0)

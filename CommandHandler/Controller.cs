@@ -10,12 +10,6 @@ using CommandHandler.Commands.Register;
 
 namespace CommandHandler
 {
-    /// <summary>
-    /// Аналогично с CommandHandler. Здесь только вызываем Execute методы, не думаю что здесь что-то 
-    /// можно поменять
-    /// З.Ы. как прочтёшь, удаляй
-    /// </summary>
-
     public class Controller
     {
         private readonly IExitCommand exitCommand;

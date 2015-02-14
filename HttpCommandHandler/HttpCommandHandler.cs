@@ -6,23 +6,23 @@ namespace HttpCommandHandler
 {
     public class HttpCommandHandler
     {
-        private readonly HttpController controller;
+        private readonly object controller;
 
-        public HttpCommandHandler(HttpController controller)
+        public HttpCommandHandler(object controller)
         {
             this.controller = controller;
         }
 
-        public void ExecuteMethod(HttpListenerContext context)
+        public void ExecuteMethod(HttpListenerContext context, string cmd)
         {
-            MethodInfo mi = controller.GetType().GetMethod(context.Request.Headers.Get("cmd"));
+            MethodInfo mi = controller.GetType().GetMethod(cmd);
             if (mi != null)
             {
                 mi.Invoke(controller, new object[] { context });
             }
             else
             {
-                Console.WriteLine("Fail execute");
+                Console.WriteLine("Execute fail");
             }
         }
     }

@@ -49,6 +49,8 @@
     <Compile Include="Commands\Authorization\AuthorizationCommand.cs" />
     <Compile Include="Commands\IAntilHttpCommand.cs" />
     <Compile Include="Commands\Authorization\IAuthorizationCommand.cs" />
+    <Compile Include="Commands\Push\IPushCommand.cs" />
+    <Compile Include="Commands\Push\PushCommand.cs" />
     <Compile Include="Commands\Registration\IRegistrationCommand.cs" />
     <Compile Include="Commands\Registration\RegistrationCommand.cs" />
     <Compile Include="HttpCommandHandler.cs" />

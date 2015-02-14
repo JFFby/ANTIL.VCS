@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using ANTIL.Domain.Core.Entities;
 using ANTIL.Domain.Dao.Interfaces;
@@ -24,7 +25,6 @@ namespace HttpCommandHandler.Commands.Registration
                 };
 
                 userDao.Save(user);
-
                 Console.WriteLine("User was added");
 
                 var response = context.Response;

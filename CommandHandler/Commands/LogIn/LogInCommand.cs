@@ -22,6 +22,12 @@ namespace CommandHandler.Commands.LogIn
 
         public void Execute(ICollection<string> args)
         {
+            if (sh.UserName != string.Empty)
+            {
+                ch.WriteLine("You're already logged in.", ConsoleColor.White);
+                return;
+            }
+
             ch.WriteLine("Enter your username: ");
 
             userName = Console.ReadLine();
@@ -54,7 +60,7 @@ namespace CommandHandler.Commands.LogIn
             {
                 sh.UserName = userName;
             }
-            else ch.WriteLine("Invalid user name or password.", ConsoleColor.Red);
+            else ch.WriteLine("Invalid user name or password. Try again.", ConsoleColor.Red);
         }
 
         private string GetPassword()

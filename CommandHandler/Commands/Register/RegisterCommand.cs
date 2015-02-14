@@ -13,9 +13,21 @@ namespace CommandHandler.Commands.Register
     {
         private string userName { get; set; }
         private string password { get; set; }
+        private AntilStorageHelper sh;
+
+        public RegisterCommand(AntilStorageHelper storageHelper)
+        {
+            sh = storageHelper;
+        }
 
         public void Execute(ICollection<string> args)
         {
+            if (sh.UserName != string.Empty)
+            {
+                ch.WriteLine("You're already logged in.", ConsoleColor.White);
+                return;
+            }
+
             ch.WriteLine("Enter a username: ");
 
             userName = Console.ReadLine();
@@ -69,8 +81,10 @@ namespace CommandHandler.Commands.Register
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                sh.UserName = userName;
                 ch.WriteLine(string.Format("You've successfully registered {0}'s acount.", userName),
                     ConsoleColor.Green);
+
             }
             else ch.WriteLine("Sorry, this user name is taken.", ConsoleColor.Red);
         }

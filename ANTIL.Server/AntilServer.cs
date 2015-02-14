@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using HttpCommandHandler;
 using HttpCommandHandler.Windsdor;
 
 namespace ANTIL.Server
@@ -23,15 +24,14 @@ namespace ANTIL.Server
             while (true)
             {
                 var context = listner.GetContext();
-                Task.Factory.StartNew(() => Test(context));
-                Console.WriteLine("в главном");
+                Task.Factory.StartNew(() => ProcessRequest(context));
             }
         }
 
-        public void Test(HttpListenerContext context)
+        public void ProcessRequest(HttpListenerContext context)
         {
-            var cmdHendler = IOC.Resolve<HttpCommandHandler.HttpCommandHandler>();
-            cmdHendler.ExecuteMethod(context);
+            var cmdHendler = new HttpCommandHandler.HttpCommandHandler(IOC.Resolve<HttpController>());
+            cmdHendler.ExecuteMethod(context, context.Request.Headers.Get("cmd"));
         }
 
         public void Dispose()

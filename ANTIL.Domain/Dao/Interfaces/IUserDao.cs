@@ -5,5 +5,6 @@ namespace ANTIL.Domain.Dao.Interfaces
 {
     public interface IUserDao : IGenericDao<User>
     {
+        bool IsExistUser(string login, string password);
     }
 }

@@ -2,13 +2,18 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
                    assembly="ANTIL.Domain.Core"
                    namespace="ANTIL.Domain.Core.Entities">
-  <class name="AntilFile" table="[File]">
+  <class name="AntilFile" table="[Files]">
     <id name="Id">
       <generator class="identity"/>
     </id>
     <property name="Name" not-null="true" />
     <property name="Path" not-null="true" />
     <property name="Updated" not-null="true" />
-    <property name="Version" not-null="true" />
+    <property name="Extension" not-null="true" />
+    <property name="CommitName" not-null="true" />
+    <property name="Project" not-null="true" />
+    <property name="Owner" not-null="true" />
+    <property name="ParentCommit" not-null="true" />
+    <property name="Data" not-null="true" />
   </class>
 </hibernate-mapping>

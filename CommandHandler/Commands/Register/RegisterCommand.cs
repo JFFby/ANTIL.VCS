@@ -9,7 +9,7 @@ using System.Net;
 
 namespace CommandHandler.Commands.Register
 {
-    public class RegisterCommand: BaseCommand, IRegisterCommand
+    public class RegisterCommand : BaseCommand, IRegisterCommand
     {
         private string userName { get; set; }
         private string password { get; set; }
@@ -30,8 +30,23 @@ namespace CommandHandler.Commands.Register
 
             if (password == null)
                 return;
+<<<<<<< HEAD
             
             SendRegisterRequest();
+=======
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3300/");
+            request.Headers.Add("cmd", "Registration");
+            request.Headers.Add("Username", userName);
+            request.Headers.Add("Password", password);
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            if (response.StatusCode == HttpStatusCode.OK)
+                ch.WriteLine(string.Format("Welocme to ANTILvcs, {0}", userName));
+            else ch.WriteLine("Error! This username is taken.", ConsoleColor.Red);
+            response.Close();
+
+>>>>>>> origin/master
         }
 
         private string GetPassword()

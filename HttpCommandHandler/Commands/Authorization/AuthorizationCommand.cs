@@ -28,7 +28,7 @@ namespace HttpCommandHandler.Commands.Authorization
                 }
                 else
                 {
-                    context.Response.StatusCode = 500;
+                    context.Response.StatusCode = 204;
                     context.Response.StatusDescription = "Fail";
                 }
             }

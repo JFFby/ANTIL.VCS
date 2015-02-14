@@ -42,6 +42,7 @@
     <Compile Include="Entities\AntilFile.cs" />
     <Compile Include="Entities\Common\DomainObject.cs" />
     <Compile Include="Entities\Common\EditableDomainObject.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

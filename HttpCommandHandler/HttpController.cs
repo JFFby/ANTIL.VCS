@@ -1,12 +1,21 @@
 ﻿using System;
+using System.Net;
+using HttpCommandHandler.Commands.Registration;
 
 namespace HttpCommandHandler
 {
     public class HttpController
     {
-        public void Init()
+        private readonly IRegistration registration;
+
+        public HttpController(IRegistration registration)
         {
-            Console.WriteLine("Exelent");
+            this.registration = registration;
         }
+
+        public void Registration(HttpListenerContext context)
+        {
+            registration.Execute(context);
+        } 
     }
 }

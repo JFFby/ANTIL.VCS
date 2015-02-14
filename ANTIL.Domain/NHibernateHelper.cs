@@ -1,4 +1,7 @@
-﻿using ANTIL.Domain.Core.Entities.Common;
+﻿using System;
+using ANTIL.Domain.Core.Entities.Common;
+using ANTIL.Domain.Dao.Implementations.Common;
+using Castle.MicroKernel.Registration;
 using NHibernate;
 using NHibernate.Cfg;
 
@@ -25,8 +28,7 @@ namespace ANTIL.Domain
         {
             var configuration = new Configuration();
             configuration.Configure();
-            configuration.AddAssembly(typeof (DomainObject).Assembly);
-
+            configuration.AddAssembly(System.Reflection.Assembly.GetExecutingAssembly()); //typeof(DataAccessObject).Assembly
             _sessionFactory = configuration.BuildSessionFactory();
         }
 

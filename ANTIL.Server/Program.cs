@@ -1,7 +1,4 @@
-﻿using Castle.Windsor;
-using HttpCommandHandler.Windsdor;
-
-namespace ANTIL.Server
+﻿namespace ANTIL.Server
 {
     class Program
     {

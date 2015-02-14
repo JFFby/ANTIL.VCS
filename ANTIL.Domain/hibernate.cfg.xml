@@ -4,7 +4,8 @@
     <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
     <property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
     <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
-    <property name="connection.connection_string">Server=PC\JFF;Database=ANTIL;Integrated Security=true;</property>
+    <property name="connection.connection_string">Server=JFF;Database=ANTIL;Integrated Security=true;</property>
    <property name="show_sql">false</property>
+    <mapping assembly="ANTIL.Domain.Core"/>
   </session-factory>
 </hibernate-configuration>

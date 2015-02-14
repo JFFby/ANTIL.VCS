@@ -23,12 +23,12 @@ namespace ANTIL.Server
             while (true)
             {
                 var context = listner.GetContext();
-                Task.Factory.StartNew(() => Test(context));
+                Task.Factory.StartNew(() => ProcessRequest(context));
                 Console.WriteLine("в главном");
             }
         }
 
-        public void Test(HttpListenerContext context)
+        public void ProcessRequest(HttpListenerContext context)
         {
             var cmdHendler = IOC.Resolve<HttpCommandHandler.HttpCommandHandler>();
             cmdHendler.ExecuteMethod(context);

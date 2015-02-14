@@ -15,8 +15,7 @@ namespace HttpCommandHandler
 
         public void ExecuteMethod(HttpListenerContext context)
         {
-            //MethodInfo mi = controller.GetType().GetMethod(context.Request.Headers.Get("cmd"));
-            MethodInfo mi = controller.GetType().GetMethod(context.Request.QueryString["cmd"]);
+            MethodInfo mi = controller.GetType().GetMethod(context.Request.Headers.Get("cmd"));
             if (mi != null)
             {
                 mi.Invoke(controller, new object[] { context });

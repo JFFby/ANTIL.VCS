@@ -13,31 +13,63 @@ namespace CommandHandler.Commands.Register
     {
         private string userName { get; set; }
         private string password { get; set; }
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3300/");
+        private HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3300/");
 
         public void Execute(ICollection<string> args)
         {
             if (args.Count != 1 || args.ToArray()[0].Length == 0)
             {
-                ch.WriteLine("Bad arguments. Type \"help\" to see the reference.");
+                ch.WriteLine("Bad arguments. Type \"help\" to see the reference.", ConsoleColor.Red);
                 return;
             }
 
             userName = args.ToArray()[0];
             password = GetPassword();
 
+            if (password == null)
+                return;
+
             request.Headers.Add("cmd", "Registration");
             request.Headers.Add("Username", userName);
             request.Headers.Add("Password", password);
 
-            WebResponse response = request.GetResponse();
-
-            Console.WriteLine(response.Headers.Get("result"));
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            if (response.StatusCode == HttpStatusCode.OK)
+                ch.WriteLine(string.Format("Welocme to ANTILvcs, {0}", userName));
+            else ch.WriteLine("Error! This username is taken.", ConsoleColor.Red);
         }
 
         private string GetPassword()
         {
-            return Console.ReadLine();
+            string password = "";
+            ConsoleKeyInfo key;
+            ch.WriteLine("Enter your password: ");
+
+            do
+            {
+                key = Console.ReadKey(true);
+                if (char.IsLetterOrDigit(key.KeyChar))
+                {
+                    password += key.KeyChar;
+                    Console.Write("*");
+                }
+                else if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password = password.Substring(0, password.Length - 1);
+                    Console.Write("\b \b");
+                }
+            }
+            while (key.Key != ConsoleKey.Enter);
+
+            Console.WriteLine();
+
+            if (password.Length < 4)
+            {
+                ch.WriteLine("Password must be at least 4 characters long.", ConsoleColor.Red);
+                return null;
+            }
+
+            return password;
         }
     }
 }

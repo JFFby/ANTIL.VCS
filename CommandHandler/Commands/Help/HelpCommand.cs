@@ -19,6 +19,8 @@ namespace CommandHandler.Commands.Help
             ch.WriteLine("4) init      - Initialize ANTIL repository in current directory");
             ch.WriteLine("\t\t<...>      - Project name");
             ch.WriteLine("5) list      - List of existing repositories");
+            ch.WriteLine("6) register  - Register a new user");
+            ch.WriteLine("\t\t[username]    - user name");
             Console.WriteLine("\n");
         }
     }

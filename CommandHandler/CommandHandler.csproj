@@ -45,10 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\LogIn\ILoginCommand.cs" />
+    <Compile Include="Commands\LogIn\LoginCommand.cs" />
     <Compile Include="Commands\Register\IRegisterCommand.cs" />
     <Compile Include="Commands\Register\RegisterCommand.cs" />
-    <Compile Include="Commands\Test\ITestCommand.cs" />
-    <Compile Include="Commands\Test\TestCommand.cs" />
     <Compile Include="Entites\AntilStoreItem.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\List\IListCommand.cs" />

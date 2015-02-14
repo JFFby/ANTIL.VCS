@@ -17,7 +17,8 @@ namespace CommandHandler.Helpers
             {
                 var document = new XDocument(new XElement("Antil",
                     new XElement("Cd", new XAttribute("path", string.Empty)),
-                    new XElement("Projects"))
+                    new XElement("Projects"),
+                    new XElement("UserName"))
                    );
 
                 document.Save(storagePath);
@@ -25,10 +26,10 @@ namespace CommandHandler.Helpers
                 return new AntilStoreItem
                 {
                     Store = new FileInfo(storagePath),
-                    Cd = string.Empty
+                    Cd = string.Empty,
                 };
             }
-            
+
             return new AntilStoreItem
             {
                 Store = file,
@@ -70,9 +71,9 @@ namespace CommandHandler.Helpers
 
         public void SetCd(string value)
         {
-             var splitter = String.Empty;
-            if(value != string.Empty)
-            splitter = value.ToCharArray()[value.Length - 1].ToString() == "\\" ? string.Empty : "\\";
+            var splitter = String.Empty;
+            if (value != string.Empty)
+                splitter = value.ToCharArray()[value.Length - 1].ToString() == "\\" ? string.Empty : "\\";
             var doc = XDocument.Load(storagePath);
             doc.Root.Element("Cd").Attribute("path").SetValue(value + splitter);
             doc.Save(storagePath);
@@ -82,6 +83,20 @@ namespace CommandHandler.Helpers
         {
             var doc = XDocument.Load(storagePath);
             return doc.Root.Element("Cd").Attribute("path").Value;
+        }
+
+        public string UserName
+        {
+            get
+            {
+                return XDocument.Load(storagePath).Root.Element("UserName").Value;
+            }
+            set
+            {
+                var doc = XDocument.Load(storagePath);
+                doc.Root.Element("UserName").Value = value;
+                doc.Save(storagePath);
+            }
         }
 
         public string GetProjectName()
@@ -100,21 +115,21 @@ namespace CommandHandler.Helpers
 
         public IEnumerable<AntilProject> GetProjects()
         {
-           var xElement =  XDocument.Load(storagePath).Root.Element("Projects");
-                if (xElement != null)
+            var xElement = XDocument.Load(storagePath).Root.Element("Projects");
+            if (xElement != null)
+            {
+                var progects = new List<AntilProject>();
+                foreach (var el in xElement.Elements("Project"))
                 {
-                    var progects = new List<AntilProject>();
-                    foreach (var el in xElement.Elements("Project"))
+                    progects.Add(new AntilProject
                     {
-                        progects.Add(new AntilProject
-                        {
-                            Name = el.Element("name").Value,
-                            Path = el.Element("path").Value
-                        });
-                    }
-
-                    return progects;
+                        Name = el.Element("name").Value,
+                        Path = el.Element("path").Value
+                    });
                 }
+
+                return progects;
+            }
 
             return new List<AntilProject>();
         }

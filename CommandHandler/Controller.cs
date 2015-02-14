@@ -7,15 +7,10 @@ using CommandHandler.Commands.Init;
 using CommandHandler.Commands.List;
 using CommandHandler.Commands.Status;
 using CommandHandler.Commands.Register;
+using CommandHandler.Commands.LogIn;
 
 namespace CommandHandler
 {
-    /// <summary>
-    /// Аналогично с CommandHandler. Здесь только вызываем Execute методы, не думаю что здесь что-то 
-    /// можно поменять
-    /// З.Ы. как прочтёшь, удаляй
-    /// </summary>
-
     public class Controller
     {
         private readonly IExitCommand exitCommand;
@@ -26,6 +21,7 @@ namespace CommandHandler
         private readonly IStatusCommand statusCommand;
         private readonly IListCommand listCommand;
         private readonly IRegisterCommand registerCommand;
+        private readonly ILoginCommand loginCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -34,7 +30,8 @@ namespace CommandHandler
             IInitCommand initComman,
             IStatusCommand statusCommand,
             IListCommand listCommand,
-            IRegisterCommand registerCommand)
+            IRegisterCommand registerCommand,
+            ILoginCommand logInCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -44,6 +41,7 @@ namespace CommandHandler
             this.statusCommand = statusCommand;
             this.listCommand = listCommand;
             this.registerCommand = registerCommand;
+            this.loginCommand = logInCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -84,6 +82,11 @@ namespace CommandHandler
         public void Register(ICollection<string> args)
         {
             registerCommand.Execute(args);
+        }
+
+        public void Login(ICollection<string> args)
+        {
+            loginCommand.Execute(args);
         }
     }
 }

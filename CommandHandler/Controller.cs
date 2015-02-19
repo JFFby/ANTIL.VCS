@@ -10,6 +10,8 @@ using CommandHandler.Commands.Register;
 using CommandHandler.Commands.LogIn;
 using CommandHandler.Commands.Add;
 using CommandHandler.Commands.Remove;
+using CommandHandler.Commands.Push;
+using CommandHandler.Helpers;
 
 namespace CommandHandler
 {
@@ -26,6 +28,7 @@ namespace CommandHandler
         private readonly ILoginCommand loginCommand;
         private readonly IAddCommand addCommand;
         private readonly IRemoveCommand removeCommand;
+        private readonly IPushCommand pushCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -37,7 +40,8 @@ namespace CommandHandler
             IRegisterCommand registerCommand,
             ILoginCommand logInCommand,
             IAddCommand addCommand,
-            IRemoveCommand removeCommand)
+            IRemoveCommand removeCommand, 
+            IPushCommand pushCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -50,6 +54,7 @@ namespace CommandHandler
             this.loginCommand = logInCommand;
             this.addCommand = addCommand;
             this.removeCommand = removeCommand;
+            this.pushCommand = pushCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -87,11 +92,13 @@ namespace CommandHandler
             listCommand.Execute(args);
         }
 
+        [AllowUnauthorized]
         public void Register(ICollection<string> args)
         {
             registerCommand.Execute(args);
         }
 
+        [AllowUnauthorized]
         public void Login(ICollection<string> args)
         {
             loginCommand.Execute(args);
@@ -105,6 +112,11 @@ namespace CommandHandler
         public void Remove(ICollection<string> args)
         {
             removeCommand.Execute(args);
+        }
+
+        public void Push(ICollection<string> args)
+        {
+            pushCommand.Execute(args);
         }
     }
 }

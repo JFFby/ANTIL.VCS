@@ -113,22 +113,36 @@ namespace CommandHandler.Helpers
             return string.Empty;
         }
 
+        public AntilProject GetProject()
+        {
+            var cd = GetCdPath();
+            var projects = GetProjects();
+
+            foreach (var project in projects)
+            {
+                if (cd.IndexOf(project.Path, System.StringComparison.OrdinalIgnoreCase) > -1)
+                    return project;
+            }
+
+            return null;
+        }
+
         public IEnumerable<AntilProject> GetProjects()
         {
             var xElement = XDocument.Load(storagePath).Root.Element("Projects");
             if (xElement != null)
             {
-                var progects = new List<AntilProject>();
+                var projects = new List<AntilProject>();
                 foreach (var el in xElement.Elements("Project"))
                 {
-                    progects.Add(new AntilProject
+                    projects.Add(new AntilProject
                     {
                         Name = el.Element("name").Value,
                         Path = el.Element("path").Value
                     });
                 }
 
-                return progects;
+                return projects;
             }
 
             return new List<AntilProject>();

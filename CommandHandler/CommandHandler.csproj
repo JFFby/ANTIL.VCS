@@ -49,6 +49,8 @@
     <Compile Include="Commands\Add\IAddCommand.cs" />
     <Compile Include="Commands\LogIn\ILoginCommand.cs" />
     <Compile Include="Commands\LogIn\LoginCommand.cs" />
+    <Compile Include="Commands\Push\IPushCommand.cs" />
+    <Compile Include="Commands\Push\PushCommand.cs" />
     <Compile Include="Commands\Register\IRegisterCommand.cs" />
     <Compile Include="Commands\Register\RegisterCommand.cs" />
     <Compile Include="Commands\Remove\IRemoveCommand.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Commands\Status\IStatusCommand.cs" />
     <Compile Include="Commands\Status\StatusCommand.cs" />
     <Compile Include="Entites\AntilProject.cs" />
+    <Compile Include="Helpers\AllowAnothorized.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />
     <Compile Include="Helpers\CommandHandlerHelper.cs" />
     <Compile Include="Entites\CommandItem.cs" />

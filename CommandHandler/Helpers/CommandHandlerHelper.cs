@@ -9,7 +9,6 @@ namespace CommandHandler.Helpers
 {
     public class CommandHandlerHelper
     {
-
         public bool ExecuteMethod(object methodHandler, string command)
         {
             var comandItem = ParseCommand(command);
@@ -92,6 +91,14 @@ namespace CommandHandler.Helpers
         {
             var result = false;
             MethodInfo methodInfo = methodHandler.GetType().GetMethod(command);
+            if (new AntilStorageHelper().UserName == string.Empty
+                && methodInfo.GetCustomAttribute<AllowUnauthorized>() == null)
+            {
+                Console.WriteLine("You're not logged in. Type \"login\" to authenticate or"
+                    + "\"register\" to create an account.");
+                return result;
+            }
+
             if (methodInfo != null && methodInfo.IsPublic)
             {
                 methodInfo.Invoke(methodHandler, args);

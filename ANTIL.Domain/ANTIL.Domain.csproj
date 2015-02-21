@@ -37,6 +37,9 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -57,15 +60,21 @@
   <ItemGroup>
     <Compile Include="CastleWndsor\WindsorNhibernateInstaller.cs" />
     <Compile Include="Dao\Implementations\AntilFileDao.cs" />
+    <Compile Include="Dao\Implementations\CommitDao.cs" />
     <Compile Include="Dao\Implementations\Common\DataAccessObject.cs" />
     <Compile Include="Dao\Implementations\Common\DataBaseTransaction.cs" />
     <Compile Include="Dao\Implementations\Common\GenericDao.cs" />
+    <Compile Include="Dao\Implementations\ProjectDao.cs" />
     <Compile Include="Dao\Implementations\UserDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IDataBaseTransaction.cs" />
+    <Compile Include="Dao\Interfaces\ICommitDao.cs" />
+    <Compile Include="Dao\Interfaces\IProjectDao.cs" />
     <Compile Include="Dao\Interfaces\IAntilFileDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IGenericDao.cs" />
     <Compile Include="Dao\Interfaces\Common\IDataAccessObject.cs" />
     <Compile Include="Dao\Interfaces\IUserDao.cs" />
+    <Compile Include="Mapping\CommitMap.cs" />
+    <Compile Include="Mapping\ProjectMap.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

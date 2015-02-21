@@ -11,15 +11,9 @@ namespace ANTIL.Domain.Core.Entities
 
         public virtual string Extension { get; set; }
 
-        public virtual string CommitName { get; set; }
-
-        public virtual string Project { get; set; }
-
-        public virtual string Owner { get; set; }
-
-        public virtual string ParentCommit { get; set; }
-
         public virtual byte[] Data { get; set; }
+
+        public virtual Commit Commit { get; set; }
 
     }
 }

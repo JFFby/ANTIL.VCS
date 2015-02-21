@@ -8,5 +8,11 @@
     </id>
     <property name="UserName" not-null="true" />
     <property name="Password" not-null="true" />
+    <bag name="Projects"
+         inverse="true"
+         cascade="all">
+      <key column="UserId"/>
+      <one-to-many class="Project"/>
+    </bag>
   </class>
 </hibernate-mapping>

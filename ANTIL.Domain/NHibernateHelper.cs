@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using ANTIL.Domain.Core.Entities.Common;
 using ANTIL.Domain.Dao.Implementations.Common;
 using ANTIL.Domain.Dao.Interfaces.Common;
 using Castle.MicroKernel.Registration;
+using FluentNHibernate;
+using FluentNHibernate.Cfg;
+using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Linq.Functions;
 
 namespace ANTIL.Domain
 {
@@ -30,7 +35,21 @@ namespace ANTIL.Domain
             var configuration = new Configuration();
             configuration.Configure();
             configuration.AddAssembly(typeof(IDataAccessObject).Assembly);
+
+            var fluentModel = new PersistenceModel();
+            fluentModel.AddMappingsFromAssembly(typeof(IDataAccessObject).Assembly);
+            fluentModel.Configure(configuration);
+
             _sessionFactory = configuration.BuildSessionFactory();
+            //Fluently.Configure().Database(
+            //    MsSqlCeConfiguration.Standard.Dialect("NHibernate.Dialect.MsSql2005Dialect").
+            //    ConnectionString("Server=JFF;Database=ANTIL;Integrated Security=true;")
+            //    ).Mappings(x =>
+            //{
+            //    x.HbmMappings.AddFromAssemblyOf<IDataAccessObject>();
+            //    x.FluentMappings.AddFromAssemblyOf<IDataAccessObject>();
+            //}).BuildSessionFactory();
+
         }
 
         public static ISession OpenSession()

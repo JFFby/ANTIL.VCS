@@ -10,10 +10,7 @@
     <property name="Path" not-null="true" />
     <property name="Updated" not-null="true" />
     <property name="Extension" not-null="true" />
-    <property name="CommitName" not-null="true" />
-    <property name="Project" not-null="true" />
-    <property name="Owner" not-null="true" />
-    <property name="ParentCommit" not-null="true" />
     <property name="Data" not-null="true" />
+    <many-to-one name="Commit" column="CommitId"/>
   </class>
 </hibernate-mapping>

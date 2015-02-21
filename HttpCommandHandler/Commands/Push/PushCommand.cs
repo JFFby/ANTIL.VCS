@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using ANTIL.Domain.Core.Entities;
 using ANTIL.Domain.Dao.Interfaces;
 
@@ -11,42 +14,73 @@ namespace HttpCommandHandler.Commands.Push
         private readonly IAntilFileDao antilFileDao;
         private readonly HttpCommandHandler cmdHandler;
         private List<AntilFile> Repository;
+        private readonly IProjectDao projectDao;
+        private readonly IUserDao userDao;
+        private readonly ICommitDao commitDao;
 
-        public PushCommand(IAntilFileDao antilFileDao)
+        public PushCommand(IAntilFileDao antilFileDao,
+            IProjectDao projectDao,
+            IUserDao userDao,
+            ICommitDao commitDao)
         {
             this.antilFileDao = antilFileDao;
-            this.cmdHandler = new HttpCommandHandler(this);
+            this.projectDao = projectDao;
+            this.userDao = userDao;
+            this.commitDao = commitDao;
+            cmdHandler = new HttpCommandHandler(this);
             Repository = new List<AntilFile>();
         }
 
-        public void Execute(HttpListenerContext contect)
+        public void Execute(HttpListenerContext contecxt)
         {
-            cmdHandler.ExecuteMethod(contect,contect.Request.Headers.Get("param"));
+            cmdHandler.ExecuteMethod(contecxt, contecxt.Request.Headers.Get("action"), this);
         }
 
-        private void Add(HttpListenerContext context)
+        public void Info(HttpListenerContext context)
+        {
+            try
+            {
+                string userName = context.Request.Headers.Get("owner");
+                var user = userDao.CreateQuery().FirstOrDefault(u => u.Id != 0);
+                if (user != null)
+                {
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                context.Response.StatusCode = 204;
+                context.Response.StatusDescription = ex.Message;
+            }
+            finally
+            {
+                context.Response.Close();
+            }
+
+        }
+
+        public void File(HttpListenerContext context)
         {
             try
             {
                 var file = new AntilFile
                 {
-                    Name = context.Request.Headers.Get("name"),
-                    Updated = DateTime.Parse(context.Request.Headers.Get("date")),
+                    Name = context.Request.Headers.Get("fileName"),
+                    Updated = DateTime.Parse(context.Request.Headers.Get("dateTime")),
                     Path = context.Request.Headers.Get("fullName"),
-                    CommitName = context.Request.Headers.Get("commitName"),
                     Extension = context.Request.Headers.Get("extension"),
-                    Owner = context.Request.Headers.Get("owner"),
-                    ParentCommit = context.Request.Headers.Get("parent"),
-                    Project = context.Request.Headers.Get("project")
+                    Data = Encoding.ASCII.GetBytes("JFF"),
+                    Id = default(int)
                 };
 
                 Repository.Add(file);
+                antilFileDao.Save(file);
                 context.Response.StatusCode = 200;
                 context.Response.StatusDescription = "Ok";
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = 204;
                 context.Response.StatusDescription = ex.Message;
             }
             finally
@@ -55,7 +89,7 @@ namespace HttpCommandHandler.Commands.Push
             }
         }
 
-        private void Done(HttpListenerContext context)
+        private void Update(HttpListenerContext context)
         {
             try
             {
@@ -66,7 +100,7 @@ namespace HttpCommandHandler.Commands.Push
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = 204;
                 context.Response.StatusDescription = ex.Message;
             }
             finally

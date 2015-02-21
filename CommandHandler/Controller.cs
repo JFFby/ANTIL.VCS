@@ -10,6 +10,7 @@ using CommandHandler.Commands.Register;
 using CommandHandler.Commands.LogIn;
 using CommandHandler.Commands.Add;
 using CommandHandler.Commands.Remove;
+using CommandHandler.Commands.TestHttp;
 
 namespace CommandHandler
 {
@@ -26,6 +27,7 @@ namespace CommandHandler
         private readonly ILoginCommand loginCommand;
         private readonly IAddCommand addCommand;
         private readonly IRemoveCommand removeCommand;
+        private readonly ITestHttp testHttp;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -37,7 +39,7 @@ namespace CommandHandler
             IRegisterCommand registerCommand,
             ILoginCommand logInCommand,
             IAddCommand addCommand,
-            IRemoveCommand removeCommand)
+            IRemoveCommand removeCommand, ITestHttp testHttp)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -50,6 +52,7 @@ namespace CommandHandler
             this.loginCommand = logInCommand;
             this.addCommand = addCommand;
             this.removeCommand = removeCommand;
+            this.testHttp = testHttp;
         }
 
         public void Exit(ICollection<string> args)
@@ -105,6 +108,11 @@ namespace CommandHandler
         public void Remove(ICollection<string> args)
         {
             removeCommand.Execute(args);
+        }
+
+        public void Testhttp(ICollection<string> args)
+        {
+            testHttp.Execute(args);
         }
     }
 }

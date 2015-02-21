@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\AntilFile.cs" />
+    <Compile Include="Entities\Commit.cs" />
     <Compile Include="Entities\Common\DomainObject.cs" />
     <Compile Include="Entities\Common\EditableDomainObject.cs" />
+    <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

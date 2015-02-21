@@ -14,5 +14,10 @@ namespace ANTIL.Domain.Dao.Implementations
         {
             return CreateQuery().Any(u => u.UserName == login && u.Password == password);
         }
+
+        public User Get(string userName)
+        {
+            return CreateQuery().FirstOrDefault(u => u.UserName == userName);
+        }
     }
 }

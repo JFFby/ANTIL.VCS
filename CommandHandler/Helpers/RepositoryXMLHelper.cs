@@ -14,12 +14,13 @@ namespace CommandHandler.Helpers
             var files = GetFiles(path);
 
             var doc = new XDocument(new XElement("AntilProject",new XAttribute("name",projName),
+                new XElement("Commit", new XAttribute("name","init"),
               files.Select(f => new XElement("File",
-                  new XElement("name", f.Name), 
-                  new XElement("path",f.DirectoryName),
+                  new XElement("name", f.Name),
+                  new XElement("path", f.DirectoryName),
                   new XElement("lwt", f.LastWriteTime),
-                  new XElement("directory",f.Directory.Name),
-                  new XElement("lenght",f.Length)))
+                  new XElement("directory", f.Directory.Name),
+                  new XElement("lenght", f.Length))))
             ));
             doc.Save(path + "//" + storageName);
 

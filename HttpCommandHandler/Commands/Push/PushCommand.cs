@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using ANTIL.Domain.Core.Entities;
@@ -13,12 +10,9 @@ namespace HttpCommandHandler.Commands.Push
     {
         private readonly IAntilFileDao antilFileDao;
         private readonly HttpCommandHandler cmdHandler;
-        private List<AntilFile> Repository;
         private readonly IProjectDao projectDao;
         private readonly IUserDao userDao;
         private readonly ICommitDao commitDao;
-        private User User;
-        private List<string> test; 
 
         public PushCommand(IAntilFileDao antilFileDao,
             IProjectDao projectDao,
@@ -30,8 +24,6 @@ namespace HttpCommandHandler.Commands.Push
             this.userDao = userDao;
             this.commitDao = commitDao;
             cmdHandler = new HttpCommandHandler(this);
-            Repository = new List<AntilFile>();
-            test = new List<string>();
         }
 
         public void Execute(HttpListenerContext contecxt)
@@ -44,18 +36,15 @@ namespace HttpCommandHandler.Commands.Push
             try
             {
                 string userName = context.Request.Headers.Get("owner");
-                User = userDao.Get(userName);
-                if (User != null)
+                var user = userDao.Get(userName);
+                if (user != null)
                 {
-                    var proj = projectDao.GetOrCreateProject(context.Request.Headers.Get("project"), User);
+                    var proj = projectDao.GetOrCreateProject(context.Request.Headers.Get("project"), user);
                     string commitName = context.Request.Headers.Get("commitName");
 
                     if (!commitDao.IsUniqueCommit(commitName, proj))
                     {
-                        context.Response.StatusCode = 204;
-                        context.Response.StatusDescription = "Error. Commit name must be unique";
-                        context.Response.Close();
-                        return;
+                        throw new Exception("Error. Commit name must be unique");
                     }
 
                     var commit = new Commit
@@ -69,11 +58,11 @@ namespace HttpCommandHandler.Commands.Push
 
                     context.Response.StatusCode = 200;
                     context.Response.StatusDescription = "Commit was added";
+                    context.Response.Headers.Add("commitId",commit.Id.ToString());
                 }
                 else
                 {
-                    context.Response.StatusCode = 204;
-                    context.Response.StatusDescription = "Error. Log in please";
+                    throw new Exception("Error. Log in please");
                 }
             }
             catch (Exception ex)
@@ -92,6 +81,13 @@ namespace HttpCommandHandler.Commands.Push
         {
             try
             {
+                var commit = commitDao.Get(Int32.Parse(context.Request.Headers.Get("commitId")));
+
+                if (commit == null)
+                {
+                    throw new Exception("Error. Commit not found");
+                }
+
                 var file = new AntilFile
                 {
                     Name = context.Request.Headers.Get("fileName"),
@@ -99,10 +95,13 @@ namespace HttpCommandHandler.Commands.Push
                     Path = context.Request.Headers.Get("fullName"),
                     Extension = context.Request.Headers.Get("extension"),
                     Data = Encoding.ASCII.GetBytes("JFF"),
-                    Id = default(int)
+                    Commit = commit,
+                    Status = context.Request.Headers.Get("fileName"),
+                    Version = Int32.Parse(context.Request.Headers.Get("fileName"))
                 };
 
-                Repository.Add(file);
+              
+
                 antilFileDao.Save(file);
                 context.Response.StatusCode = 200;
                 context.Response.StatusDescription = "Ok";
@@ -114,27 +113,7 @@ namespace HttpCommandHandler.Commands.Push
             }
             finally
             {
-                context.Response.Close();
-            }
-        }
 
-        public void Update(HttpListenerContext context)
-        {
-            try
-            {
-                antilFileDao.BulkSave(Repository);
-                Console.WriteLine(string.Format("{0} files was save",Repository.Count));
-                context.Response.StatusCode = 200;
-                context.Response.StatusDescription = "Ok";
-            }
-            catch (Exception ex)
-            {
-                context.Response.StatusCode = 204;
-                context.Response.StatusDescription = ex.Message;
-            }
-            finally
-            {
-                Repository.Clear();
                 context.Response.Close();
             }
         }

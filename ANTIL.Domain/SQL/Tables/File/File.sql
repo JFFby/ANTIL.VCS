@@ -1,7 +1,7 @@
 USE [ANTIL]
 GO
 
-/****** Object:  Table [dbo].[Files]    Script Date: 14.02.2015 18:52:39 ******/
+/****** Object:  Table [dbo].[Files]    Script Date: 21.02.2015 22:31:47 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -13,15 +13,14 @@ GO
 
 CREATE TABLE [dbo].[Files](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Updated] [datetime] NOT NULL,
+	[Updated] [datetime] NULL,
 	[Name] [nvarchar](max) NOT NULL,
-	[Path] [varbinary](50) NOT NULL,
+	[Path] [nvarchar](max) NOT NULL,
 	[Extension] [nvarchar](max) NOT NULL,
-	[CommitName] [nvarchar](max) NOT NULL,
-	[Project] [nvarchar](max) NOT NULL,
-	[Owner] [nvarchar](max) NOT NULL,
-	[ParentCommit] [nvarchar](max) NOT NULL,
-	[Data] [varbinary](max) NOT NULL,
+	[CommitId] [int] NOT NULL,
+	[Data] [varbinary](max) NULL,
+	[Version] [int] NULL,
+	[Status] [nvarchar](max) NOT NULL,
  CONSTRAINT [PK_Files] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

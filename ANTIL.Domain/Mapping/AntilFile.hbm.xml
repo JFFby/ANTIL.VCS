@@ -8,9 +8,11 @@
     </id>
     <property name="Name" not-null="true" />
     <property name="Path" not-null="true" />
-    <property name="Updated" not-null="true" />
+    <property name="Updated" not-null="false" />
     <property name="Extension" not-null="true" />
-    <property name="Data" not-null="true" />
+    <property name="Data" not-null="false" />
+    <property name="Version" not-null="false" />
+    <property name="Status" not-null="true" />
     <many-to-one name="Commit" column="CommitId"/>
   </class>
 </hibernate-mapping>

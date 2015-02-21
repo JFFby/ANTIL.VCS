@@ -15,5 +15,9 @@ namespace ANTIL.Domain.Core.Entities
 
         public virtual Commit Commit { get; set; }
 
+        public virtual int? Version { get; set; }
+
+        public virtual string Status { get; set; }
+
     }
 }

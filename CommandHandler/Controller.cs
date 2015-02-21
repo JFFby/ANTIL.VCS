@@ -11,6 +11,7 @@ using CommandHandler.Commands.LogIn;
 using CommandHandler.Commands.Add;
 using CommandHandler.Commands.Remove;
 using CommandHandler.Commands.TestHttp;
+using CommandHandler.Helpers;
 
 namespace CommandHandler
 {
@@ -110,6 +111,7 @@ namespace CommandHandler
             removeCommand.Execute(args);
         }
 
+        [AllowUnauthorized]
         public void Testhttp(ICollection<string> args)
         {
             testHttp.Execute(args);

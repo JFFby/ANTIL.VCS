@@ -17,6 +17,8 @@ namespace HttpCommandHandler.Commands.Push
         private readonly IProjectDao projectDao;
         private readonly IUserDao userDao;
         private readonly ICommitDao commitDao;
+        private User User;
+        private List<string> test; 
 
         public PushCommand(IAntilFileDao antilFileDao,
             IProjectDao projectDao,
@@ -29,6 +31,7 @@ namespace HttpCommandHandler.Commands.Push
             this.commitDao = commitDao;
             cmdHandler = new HttpCommandHandler(this);
             Repository = new List<AntilFile>();
+            test = new List<string>();
         }
 
         public void Execute(HttpListenerContext contecxt)
@@ -41,10 +44,36 @@ namespace HttpCommandHandler.Commands.Push
             try
             {
                 string userName = context.Request.Headers.Get("owner");
-                var user = userDao.CreateQuery().FirstOrDefault(u => u.Id != 0);
-                if (user != null)
+                User = userDao.Get(userName);
+                if (User != null)
                 {
-                    
+                    var proj = projectDao.GetOrCreateProject(context.Request.Headers.Get("project"), User);
+                    string commitName = context.Request.Headers.Get("commitName");
+
+                    if (!commitDao.IsUniqueCommit(commitName, proj))
+                    {
+                        context.Response.StatusCode = 204;
+                        context.Response.StatusDescription = "Error. Commit name must be unique";
+                        context.Response.Close();
+                        return;
+                    }
+
+                    var commit = new Commit
+                    {
+                        Name = commitName,
+                        Project = proj,
+                        ParentCommit = commitDao.Get(context.Request.Headers.Get("parent"), proj)
+                    };
+
+                    commitDao.Save(commit);
+
+                    context.Response.StatusCode = 200;
+                    context.Response.StatusDescription = "Commit was added";
+                }
+                else
+                {
+                    context.Response.StatusCode = 204;
+                    context.Response.StatusDescription = "Error. Log in please";
                 }
             }
             catch (Exception ex)
@@ -89,7 +118,7 @@ namespace HttpCommandHandler.Commands.Push
             }
         }
 
-        private void Update(HttpListenerContext context)
+        public void Update(HttpListenerContext context)
         {
             try
             {

@@ -24,17 +24,25 @@ namespace HttpCommandHandler.Commands.Registration
                     Password = context.Request.Headers.Get("password")
                 };
 
-                userDao.Save(user);
-                Console.WriteLine("User was added");
+                if (userDao.IsExistUser(user.UserName))
+                {
+                    context.Response.StatusCode = 204;
+                    context.Response.StatusDescription = "User with this login alreadu exist";
+                }
+                else
+                {
+                    userDao.Save(user);
+                    Console.WriteLine("User was added");
 
-                var response = context.Response;
-                response.StatusCode = 200;
-                response.StatusDescription = "Ok";
+                    var response = context.Response;
+                    response.StatusCode = 200;
+                    response.StatusDescription = "Ok";
+                }
             }
             catch (Exception ex)
             {
                 var response = context.Response;
-                response.StatusCode = 500;
+                response.StatusCode = 204;
                 response.StatusDescription = ex.Message;
             }
             finally

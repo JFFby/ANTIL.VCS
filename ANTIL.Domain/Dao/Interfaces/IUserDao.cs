@@ -7,6 +7,8 @@ namespace ANTIL.Domain.Dao.Interfaces
     {
         bool IsExistUser(string login, string password);
 
+        bool IsExistUser(string login);
+
         User Get(string userName);
     }
 }

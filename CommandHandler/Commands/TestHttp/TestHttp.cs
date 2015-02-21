@@ -27,6 +27,7 @@ namespace CommandHandler.Commands.TestHttp
             ch.WriteLine("Need some args",ConsoleColor.Red);
         }
 
+        [AllowUnauthorized]
         public void File(ICollection<string> args)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:3300/");
@@ -52,6 +53,15 @@ namespace CommandHandler.Commands.TestHttp
             var response = (HttpWebResponse)request.GetResponse();
             ch.WriteLine(response.StatusDescription);
             response.Close();
+        }
+
+        [AllowUnauthorized]
+        public void Valera(ICollection<string> args)
+        {
+            var request = (HttpWebRequest) WebRequest.Create("http://localhost:3300");
+            request.Headers.Add("cmd","Push");
+            request.Headers.Add("action","Valera");
+            request.Headers.Add("valera","valera");
         }
     }
 }

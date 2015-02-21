@@ -5,5 +5,6 @@ namespace ANTIL.Domain.Dao.Interfaces
 {
     public interface IProjectDao : IGenericDao<Project>
     {
+        Project GetOrCreateProject(string projectName, User owner);
     }
 }

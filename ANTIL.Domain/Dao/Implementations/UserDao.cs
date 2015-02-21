@@ -19,5 +19,10 @@ namespace ANTIL.Domain.Dao.Implementations
         {
             return CreateQuery().FirstOrDefault(u => u.UserName == userName);
         }
+
+        public bool IsExistUser(string login)
+        {
+            return CreateQuery().Any(u => u.UserName == login);
+        }
     }
 }

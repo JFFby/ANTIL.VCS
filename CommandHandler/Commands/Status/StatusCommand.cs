@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
@@ -18,6 +17,12 @@ namespace CommandHandler.Commands.Status
 
         public void Execute(ICollection<string> args)
         {
+            if (string.IsNullOrEmpty(repoHelper.Project.Name))
+            {
+                ch.WriteLine("You need to initialize a repository first.", ConsoleColor.Red);
+                return;
+            }
+
             var repoView = repoHelper.GetRepositoryFilesFromXML();
             var files = repoHelper.GetFiles(repoHelper.Project.Path);
             repoHelper.CheckForNewCommitSection();
@@ -25,18 +30,18 @@ namespace CommandHandler.Commands.Status
 
             foreach (var file in files)
             {
-                if(repoView.Any( f=> f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime))
+                if (repoView.Any(f => f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime))
                     continue;
 
                 if (repoView.Any(f => f.FullName == file.FullName && f.LAstWriteTime != file.LastWriteTime))
                 {
-                    ch.WriteLine(string.Format("\t modified: {0}",file.FullName),ConsoleColor.Red);
+                    ch.WriteLine(string.Format("\t modified: {0}", file.FullName), ConsoleColor.Red);
                     continue;
                 }
 
                 if (repoView.All(f => f.FullName != file.FullName))
                 {
-                    ch.WriteLine(string.Format("\t added: {0}",file.FullName),ConsoleColor.Red);
+                    ch.WriteLine(string.Format("\t added: {0}", file.FullName), ConsoleColor.Red);
                     continue;
                 }
 
@@ -44,24 +49,20 @@ namespace CommandHandler.Commands.Status
                 {
                     var model =
                         newCommitFiles.First(f => f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime);
-                    ch.WriteLine(string.Format("\t {0}: {1}",model.Status,model.FullName),ConsoleColor.Green);
+                    ch.WriteLine(string.Format("\t {0}: {1}", model.Status, model.FullName), ConsoleColor.Green);
                     continue;
                 }
 
-                ch.WriteLine(string.Format("\t wtf? {0}",file.FullName),ConsoleColor.DarkCyan);
+                ch.WriteLine(string.Format("\t wtf? {0}", file.FullName), ConsoleColor.DarkCyan);
             }
 
             Console.WriteLine("");
-        }
 
-        private void CheckForRemoval(IEnumerable<FileInfo> files)
-        {
-            var repoFiles = repoHelper.GetRepositoryFilesFromXML();
-            foreach (var repoFile in repoFiles)
+            foreach (var model in repoView)
             {
-                if (files.All(f => f.FullName != repoFile.FullName))
+                if (files.All(f => f.FullName != model.FullName))
                 {
-                    ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Red);
+                    ch.WriteLine(string.Format("\t removed: {0}", model.FullName), ConsoleColor.Red);
                 }
             }
         }

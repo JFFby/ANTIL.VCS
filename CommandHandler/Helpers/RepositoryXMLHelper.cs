@@ -31,7 +31,7 @@ namespace CommandHandler.Helpers
         {
             get { return storageHelper.GetProject(); }
         }
-
+        
         public string CreateRepoStorage(string path, ICollection<string> args)
         {
             var projName = ProcessProjectName(path, args);
@@ -172,6 +172,7 @@ namespace CommandHandler.Helpers
                 .FirstOrDefault(c => c.Attribute("id").Value == "new");
         }
 
+        //TODO: Протестить добавление CommitId
         public FileViewModel MapXmlFoleToViewModel(XElement file)
         {
             return new FileViewModel
@@ -179,8 +180,20 @@ namespace CommandHandler.Helpers
                 FullName = file.Element("fullName").Value,
                 Version = Int32.Parse(file.Element("version").Value),
                 Status = file.Element("status").Value,
-                LAstWriteTime = DateTime.Parse(file.Element("lwt").Value)
+                LAstWriteTime = DateTime.Parse(file.Element("lwt").Value),
+                CommitId = Int32.Parse(file.Parent.Attribute("id").Value)
             };
+        }
+        
+        //TODO: протестить копирование узла 
+        public void AddRemovedFileInIndex(FileViewModel file)
+        {
+            var doc = Document;
+            var commit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == file.CommitId.ToString());
+            var fileMeta = commit.Elements("File").First(e => e.Element("fullName").Value == file.FullName);
+            var newCommit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
+            newCommit.Add(fileMeta);
+            doc.Save(PathToSave);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandHandler.Commands.Common;
+using CommandHandler.Entites;
 using CommandHandler.Helpers;
 using System.Xml.Linq;
 using System.IO;
@@ -100,10 +101,10 @@ namespace CommandHandler.Commands.Add
             var counter = 0;
             foreach (var file in files)
             {
-                AddFile(file,ref counter);
+                AddFile(file, ref counter);
             }
-            //CheckForRemoval(files, ref counter);
-            if(counter < 1)
+            CheckForRemoval(files, ref counter);
+            if (counter < 1)
                 ch.WriteLine("Nothing to update");
         }
 
@@ -114,21 +115,16 @@ namespace CommandHandler.Commands.Add
                 .Select(x => x.Parent).ToList();
         }
 
-        /// <summary>
-        /// Изначально писала в комманде add -a список удалённых файлов, но что-то я подумал и решил,
-        /// что наверно надо эту функцию в status надо перенисти, так что не киляй, И если будешь делать статус,
-        /// знай что она туту есть :) 
-        /// </summary>
-        /// <param name="files"></param>
-        /// <param name="counter"> для того, чтобы написть, что репозиторий не менялся с последнего коммита</param>
-        private void CheckForRemoval(IEnumerable<FileInfo> files)
+        private void CheckForRemoval(IEnumerable<FileInfo> files, ref int counter)
         {
             var repoFiles = repositoryhHelper.GetRepositoryFilesFromXML();
             foreach (var repoFile in repoFiles)
             {
                 if (files.All(f => f.FullName != repoFile.FullName))
                 {
-                    ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Red);
+                    repositoryhHelper.AddRemovedFileInIndex(repoFile);
+                    ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Green);
+                    ++counter;
                 }
             }
         }

@@ -12,11 +12,14 @@ namespace CommandHandler
 
         public DateTime LAstWriteTime { get; set; }
 
+        public int CommitId { get; set; }
+
         public void Update(FileViewModel newVersion)
         {
             this.LAstWriteTime = newVersion.LAstWriteTime;
             this.Status = newVersion.Status;
             this.Version = newVersion.Version;
+            CommitId = newVersion.CommitId;
         }
     }
 }

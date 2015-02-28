@@ -113,6 +113,19 @@ namespace CommandHandler.Helpers
             return collectedDirs;
         }
 
+        public List<FileViewModel> GetNewCommitFiles()
+        {
+            var doc = Document;
+            var newCommitSection = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
+            var newCommitFiles = new List<FileViewModel>();
+            foreach ( var file in newCommitSection.Elements("File"))
+            {
+                newCommitFiles.Add(MapXmlFoleToViewModel(file));
+            }
+
+            return newCommitFiles;
+        } 
+
         public List<FileViewModel> GetRepositoryFilesFromXML()
         {
             var doc = Document;
@@ -124,13 +137,7 @@ namespace CommandHandler.Helpers
             {
                 foreach (var file in commit.Elements("File"))
                 {
-                    var fileModel = new FileViewModel
-                    {
-                        FullName = file.Element("fullName").Value,
-                        Version = Int32.Parse(file.Element("version").Value),
-                        Status = file.Element("status").Value,
-                        LAstWriteTime = DateTime.Parse(file.Element("lwt").Value)
-                    };
+                    var fileModel = MapXmlFoleToViewModel(file);
 
                     if (repoFiles.All(f => f.FullName != fileModel.FullName))
                     {
@@ -163,6 +170,17 @@ namespace CommandHandler.Helpers
         {
            return Document.Descendants("Commit")
                 .FirstOrDefault(c => c.Attribute("id").Value == "new");
+        }
+
+        public FileViewModel MapXmlFoleToViewModel(XElement file)
+        {
+            return new FileViewModel
+            {
+                FullName = file.Element("fullName").Value,
+                Version = Int32.Parse(file.Element("version").Value),
+                Status = file.Element("status").Value,
+                LAstWriteTime = DateTime.Parse(file.Element("lwt").Value)
+            };
         }
     }
 }

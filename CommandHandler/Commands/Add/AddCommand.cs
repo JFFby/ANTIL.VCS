@@ -91,7 +91,7 @@ namespace CommandHandler.Commands.Add
             ++fileCounter;
 
             doc.Save(repositoryhHelper.PathToSave);
-            ch.WriteLine(string.Format("\t {0} was {1}", file.FullName, status), ConsoleColor.Green);
+            ch.WriteLine(string.Format("\t {1}: {0}", file.FullName, status), ConsoleColor.Green);
         }
 
         private void AddAllFiles()
@@ -121,15 +121,14 @@ namespace CommandHandler.Commands.Add
         /// </summary>
         /// <param name="files"></param>
         /// <param name="counter"> для того, чтобы написть, что репозиторий не менялся с последнего коммита</param>
-        private void CheckForRemoval(IEnumerable<FileInfo> files, ref int counter)
+        private void CheckForRemoval(IEnumerable<FileInfo> files)
         {
             var repoFiles = repositoryhHelper.GetRepositoryFilesFromXML();
             foreach (var repoFile in repoFiles)
             {
                 if (files.All(f => f.FullName != repoFile.FullName))
                 {
-                    ++counter;
-                    ch.WriteLine(string.Format("\t {0} was removed", repoFile.FullName),ConsoleColor.Red);
+                    ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Red);
                 }
             }
         }
@@ -153,13 +152,13 @@ namespace CommandHandler.Commands.Add
                 if (lwt == file.LastWriteTime)
                 {
                     if (single)
-                        ch.WriteLine(string.Format("/t {0} is alreay in index", file.FullName),ConsoleColor.Red);
+                        ch.WriteLine(string.Format("/t alreay in index: {0}", file.FullName), ConsoleColor.Red);
                     result = true;
                 }
                 else
                 {
                     xmlMeta.Element("lwt").Value = file.FullName;
-                    ch.WriteLine(string.Format("/t {0}.Index was updated", file.FullName),ConsoleColor.Green);
+                    ch.WriteLine(string.Format("/t updated in index:{0}", file.FullName), ConsoleColor.Green);
                     result = true;
                 }
             }

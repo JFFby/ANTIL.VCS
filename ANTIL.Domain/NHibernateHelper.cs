@@ -41,15 +41,6 @@ namespace ANTIL.Domain
             fluentModel.Configure(configuration);
 
             _sessionFactory = configuration.BuildSessionFactory();
-            //Fluently.Configure().Database(
-            //    MsSqlCeConfiguration.Standard.Dialect("NHibernate.Dialect.MsSql2005Dialect").
-            //    ConnectionString("Server=JFF;Database=ANTIL;Integrated Security=true;")
-            //    ).Mappings(x =>
-            //{
-            //    x.HbmMappings.AddFromAssemblyOf<IDataAccessObject>();
-            //    x.FluentMappings.AddFromAssemblyOf<IDataAccessObject>();
-            //}).BuildSessionFactory();
-
         }
 
         public static ISession OpenSession()

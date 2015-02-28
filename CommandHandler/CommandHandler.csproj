@@ -62,6 +62,7 @@
     <Compile Include="Commands\Status\IStatusCommand.cs" />
     <Compile Include="Commands\Status\StatusCommand.cs" />
     <Compile Include="Entites\AntilProject.cs" />
+    <Compile Include="FileViewModel.cs" />
     <Compile Include="Helpers\AllowAnothorized.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />
     <Compile Include="Helpers\CommandHandlerHelper.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="Commands\Cd\ICd.cs" />
     <Compile Include="Commands\Init\IInitCommand.cs" />
     <Compile Include="Commands\Init\InitCommand.cs" />
-    <Compile Include="Helpers\CommitXmlHelper.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Helpers\RepositoryXMLHelper.cs" />

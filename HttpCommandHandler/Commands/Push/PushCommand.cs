@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Text;
 using ANTIL.Domain.Core.Entities;
 using ANTIL.Domain.Dao.Interfaces;
 
@@ -58,7 +57,7 @@ namespace HttpCommandHandler.Commands.Push
 
                     context.Response.StatusCode = 200;
                     context.Response.StatusDescription = "Commit was added";
-                    context.Response.Headers.Add("commitId",commit.Id.ToString());
+                    context.Response.Headers.Add("commitId", commit.Id.ToString());
                 }
                 else
                 {
@@ -91,16 +90,28 @@ namespace HttpCommandHandler.Commands.Push
                 var file = new AntilFile
                 {
                     Name = context.Request.Headers.Get("fileName"),
-                    Updated = DateTime.Parse(context.Request.Headers.Get("dateTime")),
                     Path = context.Request.Headers.Get("fullName"),
                     Extension = context.Request.Headers.Get("extension"),
-                    Data = Encoding.ASCII.GetBytes("JFF"),
                     Commit = commit,
-                    Status = context.Request.Headers.Get("fileName"),
-                    Version = Int32.Parse(context.Request.Headers.Get("fileName"))
+                    Status = context.Request.Headers.Get("fileName")
                 };
 
-              
+                file.Status = context.Request.Headers.Get("status");
+
+                if (file.Status == "deleted")
+                {
+                    file.Data = null;
+                    file.Updated = null;
+                    file.Version = null;
+                }
+                else
+                {
+                    var data = new byte[context.Request.ContentLength64];
+                    context.Request.InputStream.Read(data, 0, data.Length);
+                    file.Data = data;
+                    file.Updated = DateTime.Parse(context.Request.Headers.Get("dateTime"));
+                    file.Version = Int32.Parse(context.Request.Headers.Get("version"));
+                }
 
                 antilFileDao.Save(file);
                 context.Response.StatusCode = 200;

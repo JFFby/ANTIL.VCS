@@ -17,7 +17,6 @@ namespace CommandHandler
             container.Register(Component.For<CommandHandlerHelper>());
             container.Register(Component.For<AntilStorageHelper>());
             container.Register(Component.For<RepositoryXMLHelper>());
-            container.Register(Component.For<CommitXmlHelper>());
         }
     }
 }

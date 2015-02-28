@@ -1,35 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
-using System.Xml.Linq;
 using System.IO;
 
 namespace CommandHandler.Commands.Remove
 {
     public class RemoveCommand : BaseCommand, IRemoveCommand
     {
-        private XDocument doc;
-        private CommitXmlHelper commitHelper;
+        private readonly RepositoryXMLHelper repositoryhHelper;
 
-        public RemoveCommand(CommitXmlHelper commitHelper)
+        public RemoveCommand(RepositoryXMLHelper repositoryhHelper)
         {
-            this.commitHelper = commitHelper;
+            this.repositoryhHelper = repositoryhHelper;
         }
 
         public void Execute(ICollection<string> args)
         {
-            if (commitHelper.Project == null)
+            if (string.IsNullOrEmpty(repositoryhHelper.Project.Name))
             {
                 ch.WriteLine("You need to initialize a repository first.", ConsoleColor.Red);
                 return;
             }
-
-            doc = commitHelper.Document;
-
+            
             if (args.Count != 1)
             {
                 ch.WriteLine("Bad arguments. Type \"help\" to see the reference");
@@ -41,35 +35,40 @@ namespace CommandHandler.Commands.Remove
             }
             else
             {
-                FileInfo file = new FileInfo(commitHelper.Project.Path + args.ToArray()[0]);
+                FileInfo file = new FileInfo(repositoryhHelper.Project.Path + args.ToArray()[0]);
                 if (file.Exists)
-                    RemoveFile(file);
+                    RemoveFile(file, true);
                 else
                 {
                     ch.WriteLine("There's no such file in commit!", ConsoleColor.Red);
                     return;
                 }
             }
-
-            doc.Save(commitHelper.Project.Path + ".ANTIL\\commit.xml");
         }
 
-        private void RemoveFile(FileInfo file)
+        private void RemoveFile(FileInfo file, bool single = false)
         {
-            foreach (var element in doc.Element("commit").Element("files").Elements("file")
-                ?? new XElement[] { })
+            var doc = repositoryhHelper.CheckForNewCommitSection();
+            var newCommit = doc.Descendants("Commit")
+                .First(e => e.Attribute("id").Value == "new");
+            if (newCommit.Elements("File").Any(e => e.Element("fullName").Value == file.FullName))
             {
-                if (element.Element("fullName").Value == file.FullName.ToString())
-                {
-                    element.Remove();
-                    ch.WriteLine(string.Format("\t{0} was  removed from commit.", file.Name));
-                }
+                newCommit.Elements("File")
+                    .First(e => e.Element("fullName").Value == file.FullName).Remove();
+                doc.Save(repositoryhHelper.PathToSave);
+                ch.WriteLine(string.
+                    Format("\t {0} was removed from repository index",file.FullName),ConsoleColor.Green);
+            }
+            else if (single)
+            {
+                ch.WriteLine(string.
+                Format("\t {0} not in the repository index", file.FullName), ConsoleColor.Red);
             }
         }
 
         private void RemoveAllFiles()
         {
-            IEnumerable<FileInfo> files = commitHelper.GetFilesFromXml();
+            IEnumerable<FileInfo> files = repositoryhHelper.GetFiles(repositoryhHelper.Project.Path);
             foreach (var file in files)
             {
                 RemoveFile(file);

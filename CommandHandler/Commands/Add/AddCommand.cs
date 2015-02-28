@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
-using CommandHandler.Entites;
 using System.Xml.Linq;
 using System.IO;
 
@@ -13,23 +10,20 @@ namespace CommandHandler.Commands.Add
 {
     public class AddCommand : BaseCommand, IAddCommand
     {
-        private CommitXmlHelper commitHelper;
-        private XDocument doc;
+        private readonly RepositoryXMLHelper repositoryhHelper;
 
-        public AddCommand(CommitXmlHelper commitHelper)
+        public AddCommand(RepositoryXMLHelper repositoryhHelper)
         {
-            this.commitHelper = commitHelper;
+            this.repositoryhHelper = repositoryhHelper;
         }
 
         public void Execute(ICollection<string> args)
         {
-            if (commitHelper.Project == null)
+            if (string.IsNullOrEmpty(repositoryhHelper.Project.Name))
             {
                 ch.WriteLine("You need to initialize a repository first.", ConsoleColor.Red);
                 return;
             }
-
-            doc = commitHelper.Document;
 
             if (args.Count != 1)
             {
@@ -42,45 +36,128 @@ namespace CommandHandler.Commands.Add
             }
             else
             {
-                FileInfo file = new FileInfo(commitHelper.Project.Path + args.ToArray()[0]);
+                FileInfo file = new FileInfo(repositoryhHelper.Project.Path + args.ToArray()[0]);
                 if (file.Exists)
-                    AddFile(file);
+                {
+                    int missValue = 1;
+                    AddFile(file, ref missValue, true);
+                }
                 else
                 {
                     ch.WriteLine("File does not exist!", ConsoleColor.Red);
                     return;
                 }
             }
-
-            doc.Save(commitHelper.Project.Path + ".ANTIL\\commit.xml");
         }
 
-        private void AddFile(FileInfo file)
+        private void AddFile(FileInfo file, ref int fileCounter, bool single = false)
         {
-            foreach (var element in doc.Element("commit").Element("files").Elements("file"))
+            if (IsAlredyInIndex(file, single))
             {
-                if (element.Element("fullName").Value == file.FullName.ToString())
-                    if (element.Element("date").Value == file.LastWriteTime.ToString())
-                        return;
-                    else element.Remove();
+                return;
             }
-            doc.Element("commit").Element("files").Add(
-                new XElement("file",
-                    new XElement("fullName", file.FullName),
-                    new XElement("name", file.Name),
-                    new XElement("extention", file.Extension),
-                    new XElement("date", file.LastWriteTime.ToString())
-                ));
-            ch.WriteLine(string.Format("\t {0} was added", file.Name));
+
+            var version = 1;
+            var status = "added";
+            var commits = repositoryhHelper.RemoveNewCommitSection(GetCommitsWithFile(file.FullName));
+            if (commits.Any())
+            {
+                var maxId = commits.Max(c => Int32.Parse(c.Attribute("id").Value));
+                var fileMeta = commits.First(x => x.Attribute("id").Value == maxId.ToString())
+                    .Elements("File").First(e => e.Element("fullName").Value == file.FullName);
+                var date = DateTime.Parse(fileMeta.Element("lwt").Value);
+                if (date == file.LastWriteTime)
+                {
+                    if (single)
+                        ch.WriteLine("File wasn't change", ConsoleColor.Red);
+                    return;
+                }
+
+                version = Int32.Parse(fileMeta.Element("version").Value) + 1;
+                status = "modified";
+            }
+
+            var doc = repositoryhHelper.CheckForNewCommitSection();
+            doc.Descendants("Commit").First(c => c.Attribute("id").Value == "new").Add(
+                new XElement("File",
+              new XElement("name", file.Name),
+              new XElement("fullName", file.FullName),
+              new XElement("path", file.DirectoryName),
+              new XElement("lwt", file.LastWriteTime),
+              new XElement("directory", file.Directory.Name),
+              new XElement("lenght", file.Length),
+              new XElement("status", status),
+              new XElement("version", version)));
+            ++fileCounter;
+
+            doc.Save(repositoryhHelper.PathToSave);
+            ch.WriteLine(string.Format("\t {0} was {1}", file.FullName, status), ConsoleColor.Green);
         }
 
         private void AddAllFiles()
         {
-            IEnumerable<FileInfo> files = commitHelper.GetFiles();
+            IEnumerable<FileInfo> files = repositoryhHelper.GetFiles(repositoryhHelper.Project.Path);
+            var counter = 0;
             foreach (var file in files)
             {
-                AddFile(file);
+                AddFile(file,ref counter);
             }
+            CheckForRemoval(files, ref counter);
+            if(counter < 1)
+                ch.WriteLine("Nothing to update");
+        }
+
+        private IEnumerable<XElement> GetCommitsWithFile(string fullName)
+        {
+            return repositoryhHelper.Document.Descendants("File")
+                .Where(x => x.Element("fullName").Value == fullName)
+                .Select(x => x.Parent).ToList();
+        }
+
+        private void CheckForRemoval(IEnumerable<FileInfo> files, ref int counter)
+        {
+            var repoFiles = repositoryhHelper.GetRepositoryFilesFromXML();
+            foreach (var repoFile in repoFiles)
+            {
+                if (files.All(f => f.FullName != repoFile.FullName))
+                {
+                    ++counter;
+                    ch.WriteLine(string.Format("\t {0} was removed", repoFile.FullName));
+                }
+            }
+        }
+
+        private bool IsAlredyInIndex(FileInfo file, bool single = false)
+        {
+            var result = false;
+            var doc = repositoryhHelper.Document;
+            var newCommit = doc.Descendants("Commit")
+                .FirstOrDefault(c => c.Attribute("id").Value == "new");
+
+            if (newCommit == null)
+                return result;
+
+            var commitFiles = newCommit.Descendants("File").ToList();
+            XElement xmlMeta = commitFiles.FirstOrDefault(e => e.Element("fullName").Value == file.FullName);
+
+            if (xmlMeta != null)
+            {
+                var lwt = DateTime.Parse(xmlMeta.Element("lwt").Value);
+                if (lwt == file.LastWriteTime)
+                {
+                    if (single)
+                        ch.WriteLine(string.Format("/t {0} is alreay in index", file.FullName),ConsoleColor.Red);
+                    result = true;
+                }
+                else
+                {
+                    xmlMeta.Element("lwt").Value = file.FullName;
+                    ch.WriteLine(string.Format("/t {0}.Index was updated", file.FullName),ConsoleColor.Green);
+                    result = true;
+                }
+            }
+
+            return result;
         }
     }
 }

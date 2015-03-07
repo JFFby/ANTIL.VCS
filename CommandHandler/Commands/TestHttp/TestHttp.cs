@@ -35,7 +35,7 @@ namespace CommandHandler.Commands.TestHttp
             request.Headers.Add("cmd", "Push");
             request.Headers.Add("action", "File");
             request.Headers.Add("fileName", "Valera2.txt");
-            request.Headers.Add("dateTime",DateTime.Now.ToString());
+            request.Headers.Add("dateTime",DateTime.Now.ToString("o"));
             request.Headers.Add("fullName", @"d:\valera.txt");
             request.Headers.Add("extension", ".txt");
 

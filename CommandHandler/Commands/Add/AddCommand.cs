@@ -122,9 +122,11 @@ namespace CommandHandler.Commands.Add
             {
                 if (files.All(f => f.FullName != repoFile.FullName))
                 {
-                    repositoryhHelper.AddRemovedFileInIndex(repoFile);
-                    ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Green);
-                    ++counter;
+                    if (repositoryhHelper.AddRemovedFileInIndex(repoFile))
+                    {
+                        ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Green);
+                        ++counter;
+                    }
                 }
             }
         }
@@ -153,8 +155,10 @@ namespace CommandHandler.Commands.Add
                 }
                 else
                 {
-                    xmlMeta.Element("lwt").Value = file.FullName;
+                    xmlMeta.Element("lwt").Value = file.LastWriteTime.ToString("o");
+                    xmlMeta.Element("status").Value = "modified";
                     ch.WriteLine(string.Format("/t updated in index:{0}", file.FullName), ConsoleColor.Green);
+                    doc.Save(repositoryhHelper.PathToSave);
                     result = true;
                 }
             }

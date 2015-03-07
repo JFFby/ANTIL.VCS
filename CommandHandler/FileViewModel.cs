@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CommandHandler
 {
@@ -20,6 +21,24 @@ namespace CommandHandler
             this.Status = newVersion.Status;
             this.Version = newVersion.Version;
             CommitId = newVersion.CommitId;
+        }
+    }
+
+    public class FileViewModelNameComparer : IEqualityComparer<FileViewModel>
+    {
+        public bool Equals(FileViewModel first, FileViewModel second)
+        {
+            if (first.FullName == second.FullName && first.CommitId == second.CommitId)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public int GetHashCode(FileViewModel file)
+        {
+            return (file.FullName + file.CommitId.ToString()).GetHashCode();
         }
     }
 }

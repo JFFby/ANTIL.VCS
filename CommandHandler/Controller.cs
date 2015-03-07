@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommandHandler.Commands.Cd;
+using CommandHandler.Commands.Commit;
 using CommandHandler.Commands.Dir;
 using CommandHandler.Commands.Exit;
 using CommandHandler.Commands.Help;
@@ -29,6 +30,7 @@ namespace CommandHandler
         private readonly IAddCommand addCommand;
         private readonly IRemoveCommand removeCommand;
         private readonly ITestHttp testHttp;
+        private readonly ICommitCommand commitCommand;
 
         public Controller(IExitCommand exitCommand,
             IHelpCommand helpCommand,
@@ -40,7 +42,8 @@ namespace CommandHandler
             IRegisterCommand registerCommand,
             ILoginCommand logInCommand,
             IAddCommand addCommand,
-            IRemoveCommand removeCommand, ITestHttp testHttp)
+            IRemoveCommand removeCommand,
+            ITestHttp testHttp, ICommitCommand commitCommand)
         {
             this.exitCommand = exitCommand;
             this.helpCommand = helpCommand;
@@ -54,6 +57,7 @@ namespace CommandHandler
             this.addCommand = addCommand;
             this.removeCommand = removeCommand;
             this.testHttp = testHttp;
+            this.commitCommand = commitCommand;
         }
 
         public void Exit(ICollection<string> args)
@@ -115,6 +119,11 @@ namespace CommandHandler
         public void Testhttp(ICollection<string> args)
         {
             testHttp.Execute(args);
+        }
+
+        public void Commit(ICollection<string> args)
+        {
+            commitCommand.Execute(args);
         }
     }
 }

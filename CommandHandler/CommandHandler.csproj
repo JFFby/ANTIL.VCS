@@ -36,6 +36,12 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Commands\Add\AddCommand.cs" />
     <Compile Include="Commands\Add\IAddCommand.cs" />
+    <Compile Include="Commands\Commit\CommitCommand.cs" />
+    <Compile Include="Commands\Commit\ICommitCommand.cs" />
     <Compile Include="Commands\LogIn\ILoginCommand.cs" />
     <Compile Include="Commands\LogIn\LoginCommand.cs" />
     <Compile Include="Commands\Register\IRegisterCommand.cs" />

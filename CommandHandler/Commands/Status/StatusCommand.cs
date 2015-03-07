@@ -23,6 +23,7 @@ namespace CommandHandler.Commands.Status
                 return;
             }
 
+            repoHelper.RemoveRepitionFromNewCommit();
             var repoView = repoHelper.GetRepositoryFilesFromXML();
             var files = repoHelper.GetFiles(repoHelper.Project.Path);
             repoHelper.CheckForNewCommitSection();
@@ -39,7 +40,8 @@ namespace CommandHandler.Commands.Status
                     continue;
                 }
 
-                if (repoView.All(f => f.FullName != file.FullName))
+                if (repoView.All(f => f.FullName != file.FullName) 
+                    && newCommitFiles.All(c => c.FullName != file.FullName))
                 {
                     ch.WriteLine(string.Format("\t added: {0}", file.FullName), ConsoleColor.Red);
                     continue;
@@ -53,16 +55,19 @@ namespace CommandHandler.Commands.Status
                     continue;
                 }
 
-                ch.WriteLine(string.Format("\t wtf? {0}", file.FullName), ConsoleColor.DarkCyan);
+                ch.WriteLine(string.Format("\t wtf?      {0}", file.FullName), ConsoleColor.DarkCyan);
             }
-
-            Console.WriteLine("");
 
             foreach (var model in repoView)
             {
-                if (files.All(f => f.FullName != model.FullName))
+                if (files.All(f => f.FullName != model.FullName)
+                    && newCommitFiles.All(c => c.FullName != model.FullName))
                 {
-                    ch.WriteLine(string.Format("\t removed: {0}", model.FullName), ConsoleColor.Red);
+                    ch.WrtieRemoved(model.FullName,ConsoleColor.Red);
+                }
+                else if (newCommitFiles.Any(c => c.FullName == model.FullName))
+                {
+                    ch.WrtieRemoved(model.FullName,ConsoleColor.Green);
                 }
             }
         }

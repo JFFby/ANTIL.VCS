@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using CommandHandler.Entites;
+using NHibernate.Hql.Ast.ANTLR.Tree;
 
 namespace CommandHandler.Helpers
 {
@@ -23,7 +24,7 @@ namespace CommandHandler.Helpers
         {
             get
             {
-                return  XDocument.Load(Project.Path + ".ANTIL\\" + storageName);
+                return XDocument.Load(Project.Path + ".ANTIL\\" + storageName);
             }
         }
 
@@ -31,17 +32,17 @@ namespace CommandHandler.Helpers
         {
             get { return storageHelper.GetProject(); }
         }
-        
+
         public string CreateRepoStorage(string path, ICollection<string> args)
         {
             var projName = ProcessProjectName(path, args);
             var files = GetFiles(path);
 
-            var doc = new XDocument(new XElement("AntilProject",new XAttribute("name",projName),
+            var doc = new XDocument(new XElement("AntilProject", new XAttribute("name", projName),
                 new XElement("Commit", new XAttribute("name", "init"), new XAttribute("id", "1"),
               files.Select(f => new XElement("File",
                   new XElement("name", f.Name),
-                  new XElement("fullName",f.FullName),
+                  new XElement("fullName", f.FullName),
                   new XElement("path", f.DirectoryName),
                   new XElement("lwt", f.LastWriteTime),
                   new XElement("directory", f.Directory.Name),
@@ -54,9 +55,9 @@ namespace CommandHandler.Helpers
             return projName;
         }
 
-        private string ProcessProjectName(string path,ICollection<string> args)
+        private string ProcessProjectName(string path, ICollection<string> args)
         {
-            if (args.Count>0)
+            if (args.Count > 0)
             {
                 return args.ToList()[0];
             }
@@ -87,8 +88,8 @@ namespace CommandHandler.Helpers
             {
                 doc.Element("AntilProject").Add(
                     new XElement("Commit",
-                        new XAttribute("id","new"),
-                        new XAttribute("name","new")));
+                        new XAttribute("id", "new"),
+                        new XAttribute("name", "new")));
                 doc.Save(PathToSave);
             }
 
@@ -97,7 +98,7 @@ namespace CommandHandler.Helpers
 
         private IEnumerable<DirectoryInfo> GetDirs(DirectoryInfo dir)
         {
-           
+
             return CollectDirs(new List<DirectoryInfo>(), dir.GetDirectories().Where(x => x.Name != ".ANTIL"));
         }
 
@@ -108,7 +109,7 @@ namespace CommandHandler.Helpers
             {
                 collectedDirs.Add(directoryInfo);
                 if (directoryInfo.GetDirectories().Any())
-                    CollectDirs(collectedDirs, directoryInfo.GetDirectories()); 
+                    CollectDirs(collectedDirs, directoryInfo.GetDirectories());
             }
             return collectedDirs;
         }
@@ -118,13 +119,13 @@ namespace CommandHandler.Helpers
             var doc = Document;
             var newCommitSection = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
             var newCommitFiles = new List<FileViewModel>();
-            foreach ( var file in newCommitSection.Elements("File"))
+            foreach (var file in newCommitSection.Elements("File"))
             {
-                newCommitFiles.Add(MapXmlFoleToViewModel(file));
+                newCommitFiles.Add(MapXmlFoleToViewModel(file, true));
             }
 
             return newCommitFiles;
-        } 
+        }
 
         public List<FileViewModel> GetRepositoryFilesFromXML()
         {
@@ -137,7 +138,7 @@ namespace CommandHandler.Helpers
             {
                 foreach (var file in commit.Elements("File"))
                 {
-                    var fileModel = MapXmlFoleToViewModel(file);
+                    var fileModel = MapXmlFoleToViewModel(file, false);
 
                     if (repoFiles.All(f => f.FullName != fileModel.FullName))
                     {
@@ -161,19 +162,18 @@ namespace CommandHandler.Helpers
         {
             if (commits.Any(e => e.Attribute("id").Value == "new"))
             {
-              commits = commits.Where(e => e.Attribute("id").Value != "new").ToList();
+                commits = commits.Where(e => e.Attribute("id").Value != "new").ToList();
             }
             return commits;
         }
-        
+
         public XElement GetNewCommitSection()
         {
-           return Document.Descendants("Commit")
-                .FirstOrDefault(c => c.Attribute("id").Value == "new");
+            return Document.Descendants("Commit")
+                 .FirstOrDefault(c => c.Attribute("id").Value == "new");
         }
 
-        //TODO: Протестить добавление CommitId
-        public FileViewModel MapXmlFoleToViewModel(XElement file)
+        public FileViewModel MapXmlFoleToViewModel(XElement file, bool isNew)
         {
             return new FileViewModel
             {
@@ -181,19 +181,48 @@ namespace CommandHandler.Helpers
                 Version = Int32.Parse(file.Element("version").Value),
                 Status = file.Element("status").Value,
                 LAstWriteTime = DateTime.Parse(file.Element("lwt").Value),
-                CommitId = Int32.Parse(file.Parent.Attribute("id").Value)
+                CommitId = isNew ? -1 : Int32.Parse(file.Parent.Attribute("id").Value)
             };
         }
-        
-        //TODO: протестить копирование узла 
-        public void AddRemovedFileInIndex(FileViewModel file)
+
+        public bool AddRemovedFileInIndex(FileViewModel file)
         {
+            if (CheckForRemovedAlreadyInIdex(file))
+                return false;
+
             var doc = Document;
             var commit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == file.CommitId.ToString());
             var fileMeta = commit.Elements("File").First(e => e.Element("fullName").Value == file.FullName);
+            fileMeta.Element("status").Value = "removed";
+            fileMeta.Element("lwt").Value = DateTime.Now.ToString("O");
             var newCommit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
             newCommit.Add(fileMeta);
             doc.Save(PathToSave);
+            return true;
+        }
+
+        private bool CheckForRemovedAlreadyInIdex(FileViewModel file)
+        {
+            return GetNewCommitFiles().Any(model => file.FullName == model.FullName && file.Status == model.Status);
+        }
+
+        public void RemoveRepitionFromNewCommit()
+        {
+            var files = GetNewCommitFiles();
+            if (files.Count != files.Distinct(new FileViewModelNameComparer()).Count())
+            {
+                var copies = files.GroupBy(f => f.FullName).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+                var doc = Document;
+                var newCommit = doc.Descendants("Commit").First(c => c.Attribute("id").Value == "new");
+                foreach (var copy in copies)
+                {
+                    var sameFiles = newCommit.Elements("File").Where(e => e.Element("fullName").Value == copy);
+                    sameFiles.OrderBy(f => DateTime.Parse(f.Element("lwt").Value))
+                          .Take(sameFiles.Count() - 1).ToList().ForEach(e => e.Remove());
+                }
+
+                doc.Save(PathToSave);
+            }
         }
     }
 }

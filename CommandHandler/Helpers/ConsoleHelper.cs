@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace CommandHandler.Helpers
 {
@@ -45,6 +46,21 @@ namespace CommandHandler.Helpers
             Console.WriteLine();
 
             return str;
+        }
+
+        public void WrtieAdded(string msg, ConsoleColor color = ConsoleColor.Gray)
+        {
+           WriteLine("\tadded:    "+msg,color);
+        }
+
+        public void WrtieRemoved(string msg, ConsoleColor color = ConsoleColor.Gray)
+        {
+            WriteLine("\tremoved:  " + msg, color);
+        }
+
+        public void WrtieModified(string msg, ConsoleColor color = ConsoleColor.Gray)
+        {
+            WriteLine("\tmodified: " + msg, color);
         }
     }
 }

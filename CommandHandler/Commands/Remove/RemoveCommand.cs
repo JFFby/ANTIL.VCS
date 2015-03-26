@@ -51,18 +51,18 @@ namespace CommandHandler.Commands.Remove
             var doc = repositoryhHelper.CheckForNewCommitSection();
             var newCommit = doc.Descendants("Commit")
                 .First(e => e.Attribute("id").Value == "new");
-            if (newCommit.Elements("File").Any(e => e.Element("fullName").Value == file.FullName))
+            if (newCommit.Elements("File").Any(e => e.Element("fullName").Value == file.ShotFileName(repositoryhHelper.Project.Path)))
             {
                 newCommit.Elements("File")
-                    .First(e => e.Element("fullName").Value == file.FullName).Remove();
+                    .First(e => e.Element("fullName").Value == file.ShotFileName(repositoryhHelper.Project.Path)).Remove();
                 doc.Save(repositoryhHelper.PathToSave);
                 ch.WriteLine(string.
-                    Format("\t {0} was removed from repository index",file.FullName),ConsoleColor.Green);
+                    Format("\t {0} was removed from repository index", file.ShotFileName(repositoryhHelper.Project.Path)), ConsoleColor.Green);
             }
             else if (single)
             {
                 ch.WriteLine(string.
-                Format("\t {0} not in the repository index", file.FullName), ConsoleColor.Red);
+                Format("\t {0} not in the repository index", file.ShotFileName(repositoryhHelper.Project.Path)), ConsoleColor.Red);
             }
         }
 

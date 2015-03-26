@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTIL.Domain.Core", "ANTIL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpCommandHandler", "HttpCommandHandler\HttpCommandHandler.csproj", "{465FCEE7-A0B7-437C-9F7C-77A69C40113C}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ANTIL.db", "ANTIL.db\ANTIL.db\ANTIL.db.sqlproj", "{3C11553C-1D16-4FA4-A889-90C6591AF3CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,12 @@ Global
 		{465FCEE7-A0B7-437C-9F7C-77A69C40113C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{465FCEE7-A0B7-437C-9F7C-77A69C40113C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{465FCEE7-A0B7-437C-9F7C-77A69C40113C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C11553C-1D16-4FA4-A889-90C6591AF3CD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -89,6 +89,7 @@
     <Compile Include="Commands\Init\InitCommand.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Helpers\FileNameHelper.cs" />
     <Compile Include="Helpers\RepositoryXMLHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindsorCommandInstaller.cs" />

@@ -22,45 +22,46 @@ namespace CommandHandler.Commands.Status
                 ch.WriteLine("You need to initialize a repository first.", ConsoleColor.Red);
                 return;
             }
-
+            repoHelper.CheckForNewCommitSection();
             repoHelper.RemoveRepitionFromNewCommit();
             var repoView = repoHelper.GetRepositoryFilesFromXML();
             var files = repoHelper.GetFiles(repoHelper.Project.Path);
-            repoHelper.CheckForNewCommitSection();
             var newCommitFiles = repoHelper.GetNewCommitFiles();
+
+            repoHelper.ClearIndexFromRemovedFiles(files.Select(f => f.ShotFileName(repoHelper.Project.Path)),newCommitFiles);
 
             foreach (var file in files)
             {
-                if (repoView.Any(f => f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime))
+                if (repoView.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
                     continue;
 
-                if (repoView.Any(f => f.FullName == file.FullName && f.LAstWriteTime != file.LastWriteTime))
+                if (repoView.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime != file.LastWriteTime))
                 {
-                    ch.WriteLine(string.Format("\t modified: {0}", file.FullName), ConsoleColor.Red);
+                    ch.WrtieModified(file.ShotFileName(repoHelper.Project.Path), ConsoleColor.Red);
                     continue;
                 }
 
-                if (repoView.All(f => f.FullName != file.FullName) 
-                    && newCommitFiles.All(c => c.FullName != file.FullName))
+                if (repoView.All(f => f.FullName != file.ShotFileName(repoHelper.Project.Path))
+                    && newCommitFiles.All(c => c.FullName != file.ShotFileName(repoHelper.Project.Path)))
                 {
-                    ch.WriteLine(string.Format("\t added: {0}", file.FullName), ConsoleColor.Red);
+                    ch.WrtieAdded(file.ShotFileName(repoHelper.Project.Path), ConsoleColor.Red);
                     continue;
                 }
 
-                if (newCommitFiles.Any(f => f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime))
+                if (newCommitFiles.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
                 {
                     var model =
-                        newCommitFiles.First(f => f.FullName == file.FullName && f.LAstWriteTime == file.LastWriteTime);
-                    ch.WriteLine(string.Format("\t {0}: {1}", model.Status, model.FullName), ConsoleColor.Green);
+                        newCommitFiles.First(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime);
+                    ch.WriteLine(string.Format("\t{0}: {1}", model.Status, model.FullName), ConsoleColor.Green);
                     continue;
                 }
 
-                ch.WriteLine(string.Format("\t wtf?      {0}", file.FullName), ConsoleColor.DarkCyan);
+                ch.WriteLine(string.Format("\twtf?      {0}", file.ShotFileName(repoHelper.Project.Path)), ConsoleColor.DarkCyan);
             }
 
             foreach (var model in repoView)
             {
-                if (files.All(f => f.FullName != model.FullName)
+                if (files.All(f => f.ShotFileName(repoHelper.Project.Path) != model.FullName)
                     && newCommitFiles.All(c => c.FullName != model.FullName))
                 {
                     ch.WrtieRemoved(model.FullName,ConsoleColor.Red);

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using CommandHandler.Entites;
-using NHibernate.Hql.Ast.ANTLR.Tree;
 
 namespace CommandHandler.Helpers
 {
@@ -42,7 +41,7 @@ namespace CommandHandler.Helpers
                 new XElement("Commit", new XAttribute("name", "init"), new XAttribute("id", "1"),
               files.Select(f => new XElement("File",
                   new XElement("name", f.Name),
-                  new XElement("fullName", f.FullName),
+                  new XElement("fullName", f.ShotFileName(Project.Path)),
                   new XElement("path", f.DirectoryName),
                   new XElement("lwt", f.LastWriteTime),
                   new XElement("directory", f.Directory.Name),
@@ -121,7 +120,7 @@ namespace CommandHandler.Helpers
             var newCommitFiles = new List<FileViewModel>();
             foreach (var file in newCommitSection.Elements("File"))
             {
-                newCommitFiles.Add(MapXmlFoleToViewModel(file, true));
+                newCommitFiles.Add(MapXmlFileToViewModel(file, true));
             }
 
             return newCommitFiles;
@@ -138,7 +137,7 @@ namespace CommandHandler.Helpers
             {
                 foreach (var file in commit.Elements("File"))
                 {
-                    var fileModel = MapXmlFoleToViewModel(file, false);
+                    var fileModel = MapXmlFileToViewModel(file, false);
 
                     if (repoFiles.All(f => f.FullName != fileModel.FullName))
                     {
@@ -167,13 +166,13 @@ namespace CommandHandler.Helpers
             return commits;
         }
 
-        public XElement GetNewCommitSection()
+        public XElement GetNewCommitSection(XDocument doc)
         {
-            return Document.Descendants("Commit")
+            return doc.Descendants("Commit")
                  .FirstOrDefault(c => c.Attribute("id").Value == "new");
         }
 
-        public FileViewModel MapXmlFoleToViewModel(XElement file, bool isNew)
+        public FileViewModel MapXmlFileToViewModel(XElement file, bool isNew)
         {
             return new FileViewModel
             {
@@ -223,6 +222,25 @@ namespace CommandHandler.Helpers
 
                 doc.Save(PathToSave);
             }
+        }
+
+        /// <summary>
+        /// ! добавляем файл в репозиторий -> add -a -> удаляем файл -> add -a -> в новый коммит не заноситься
+        /// инфа о том что удалили файл, файл остаётся висеть как только что добавленный
+        /// fix
+        /// </summary>
+        public void ClearIndexFromRemovedFiles(IEnumerable<string> fileNames, IEnumerable<FileViewModel> ncFiles)
+        {
+            RemoveFromNewCommit(ncFiles.Where(f => !fileNames.Contains(f.FullName) && f.Status != "removed")
+                .Select(f => f.FullName));
+        }
+
+        private void RemoveFromNewCommit(IEnumerable<string> fileNames)
+        {
+            var doc = Document;
+            var ncs = GetNewCommitSection(doc);
+            ncs.Elements("File").Where(e => fileNames.Contains(e.Element("fullName").Value)).ToList().ForEach(e => e.Remove());
+            doc.Save(PathToSave);
         }
     }
 }

@@ -89,10 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mapping\User.hbm.xml" />
-    <Content Include="SQL\Tables\Commit.sql" />
-    <Content Include="SQL\Tables\File\File.sql" />
-    <Content Include="SQL\Tables\Projects.sql" />
-    <Content Include="SQL\Tables\Users\Users.sql" />
     <EmbeddedResource Include="Mapping\AntilFile.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

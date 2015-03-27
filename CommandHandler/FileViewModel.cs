@@ -5,7 +5,12 @@ namespace CommandHandler
 {
     public class FileViewModel
     {
-        public string FullName { get; set; }
+        public FileViewModel(string projectPath)
+        {
+            ProjectPath = projectPath;
+        }
+
+        public string Name { get; set; }
 
         public string Status { get; set; }
 
@@ -14,6 +19,10 @@ namespace CommandHandler
         public DateTime LAstWriteTime { get; set; }
 
         public int CommitId { get; set; }
+
+        public string ProjectPath { get; set; }
+
+        public string FullPath { get { return ProjectPath + Name; } } 
 
         public void Update(FileViewModel newVersion)
         {
@@ -28,7 +37,7 @@ namespace CommandHandler
     {
         public bool Equals(FileViewModel first, FileViewModel second)
         {
-            if (first.FullName == second.FullName && first.CommitId == second.CommitId)
+            if (first.Name == second.Name && first.CommitId == second.CommitId)
             {
                 return true;
             }
@@ -38,7 +47,7 @@ namespace CommandHandler
 
         public int GetHashCode(FileViewModel file)
         {
-            return (file.FullName + file.CommitId.ToString()).GetHashCode();
+            return (file.Name + file.CommitId.ToString()).GetHashCode();
         }
     }
 }

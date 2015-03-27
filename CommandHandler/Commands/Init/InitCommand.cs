@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using CommandHandler.Commands.Commit;
 using CommandHandler.Commands.Common;
 using CommandHandler.Helpers;
 
@@ -12,13 +12,17 @@ namespace CommandHandler.Commands.Init
     {
         private readonly AntilStorageHelper storageHelper;
         private readonly RepositoryXMLHelper repositoryHelper;
+        private readonly ICommitCommand commitCommand;
         private const string subPath = ".ANTIL";
         private string cdPath;
 
-        public InitCommand(AntilStorageHelper storageHelper, RepositoryXMLHelper repositoryHelper)
+        public InitCommand(AntilStorageHelper storageHelper,
+            RepositoryXMLHelper repositoryHelper,
+            ICommitCommand commitCommand)
         {
             this.storageHelper = storageHelper;
             this.repositoryHelper = repositoryHelper;
+            this.commitCommand = commitCommand;
         }
 
         public void Execute(ICollection<string> args)
@@ -29,8 +33,11 @@ namespace CommandHandler.Commands.Init
             if (dir == null)
                 return;
 
-            var projName = repositoryHelper.CreateRepoStorage(dir.FullName, args);
-            storageHelper.AddProject(dir.FullName.Replace(subPath,""),projName);
+            var projName = repositoryHelper.ProcessProjectName(dir.FullName, args);
+            storageHelper.AddProject(dir.FullName.Replace(subPath, ""), projName);
+            repositoryHelper.CreateRepoStorage(dir.FullName, projName);
+
+            commitCommand.Execute(new List<string>(){"init"});
         }
 
         private bool IsValidData(DirectoryInfo dir)
@@ -58,7 +65,7 @@ namespace CommandHandler.Commands.Init
             if (!IsValidData(dir))
                 return null;
 
-            DirectoryInfo antilDir = null; 
+            DirectoryInfo antilDir = null;
             try
             {
                 dir.CreateSubdirectory(subPath);
@@ -72,7 +79,7 @@ namespace CommandHandler.Commands.Init
 
             ch.WriteLine("Repository was nitialized", ConsoleColor.Green);
 
-            return antilDir ;
+            return antilDir;
         }
     }
 }

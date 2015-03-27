@@ -134,4 +134,7 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ANTIL.db.publish.xml" />
+  </ItemGroup>
 </Project>

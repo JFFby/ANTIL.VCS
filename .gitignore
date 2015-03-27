@@ -173,6 +173,7 @@ UpgradeLog*.htm
 # SQL Server files
 *.mdf
 *.ldf
+*.publish.xml
 
 # Business Intelligence projects
 *.rdl.data

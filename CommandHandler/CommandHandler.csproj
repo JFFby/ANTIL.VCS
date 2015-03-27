@@ -70,6 +70,7 @@
     <Compile Include="Commands\Status\IStatusCommand.cs" />
     <Compile Include="Commands\Status\StatusCommand.cs" />
     <Compile Include="Entites\AntilProject.cs" />
+    <Compile Include="Entites\ResponseInfo.cs" />
     <Compile Include="FileViewModel.cs" />
     <Compile Include="Helpers\AllowAnothorized.cs" />
     <Compile Include="Helpers\AntilStorageHelper.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Helpers\ConsoleHelper.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Helpers\FileNameHelper.cs" />
+    <Compile Include="Helpers\HttpHelper.cs" />
     <Compile Include="Helpers\RepositoryXMLHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindsorCommandInstaller.cs" />

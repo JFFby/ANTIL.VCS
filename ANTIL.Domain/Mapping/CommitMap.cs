@@ -11,6 +11,7 @@ namespace ANTIL.Domain.Mapping
             Map(m => m.Name);
             References(m => m.ParentCommit).Column("ParentCommitId");
             References(m => m.Project).Column("ProjectId");
+            Map(m => m.Comment);
             HasMany(m => m.Files).Inverse().Cascade.All();
         }
     }

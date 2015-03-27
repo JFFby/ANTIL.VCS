@@ -13,6 +13,8 @@ namespace ANTIL.Domain.Core.Entities
 
         public virtual IList<AntilFile> Files { get; set; }
 
+        public virtual string Comment { get; set; }
+
         public Commit()
         {
             Files = new List<AntilFile>();

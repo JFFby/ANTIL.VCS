@@ -50,7 +50,8 @@ namespace HttpCommandHandler.Commands.Push
                     {
                         Name = commitName,
                         Project = proj,
-                        ParentCommit = commitDao.Get(context.Request.Headers.Get("parent"), proj)
+                        ParentCommit = commitDao.Get(context.Request.Headers.Get("parent"), proj),
+                        Comment = context.Request.Headers.Get("comment")
                     };
 
                     commitDao.Save(commit);
@@ -90,7 +91,6 @@ namespace HttpCommandHandler.Commands.Push
                 var file = new AntilFile
                 {
                     Name = context.Request.Headers.Get("fileName"),
-                    Path = context.Request.Headers.Get("fullName"),
                     Extension = context.Request.Headers.Get("extension"),
                     Commit = commit,
                     Status = context.Request.Headers.Get("fileName")

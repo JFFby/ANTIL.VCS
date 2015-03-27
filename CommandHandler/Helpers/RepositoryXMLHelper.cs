@@ -32,29 +32,25 @@ namespace CommandHandler.Helpers
             get { return storageHelper.GetProject(); }
         }
 
-        public string CreateRepoStorage(string path, ICollection<string> args)
+        public void CreateRepoStorage(string path, string projName)
         {
-            var projName = ProcessProjectName(path, args);
             var files = GetFiles(path);
 
-            var doc = new XDocument(new XElement("AntilProject", new XAttribute("name", projName),
+            var doc = new XDocument(new XElement("AntilProject", 
+                new XAttribute("name", projName), new XAttribute("currentCommitId","1"),
                 new XElement("Commit", new XAttribute("name", "init"), new XAttribute("id", "1"),
               files.Select(f => new XElement("File",
                   new XElement("name", f.Name),
                   new XElement("fullName", f.ShotFileName(Project.Path)),
-                  new XElement("path", f.DirectoryName),
                   new XElement("lwt", f.LastWriteTime),
-                  new XElement("directory", f.Directory.Name),
                   new XElement("lenght", f.Length),
                   new XElement("status", "added"),
                   new XElement("version", 1))))
             ));
             doc.Save(PathToSave);
-
-            return projName;
         }
 
-        private string ProcessProjectName(string path, ICollection<string> args)
+        public string ProcessProjectName(string path, ICollection<string> args)
         {
             if (args.Count > 0)
             {
@@ -113,12 +109,17 @@ namespace CommandHandler.Helpers
             return collectedDirs;
         }
 
-        public List<FileViewModel> GetNewCommitFiles()
+        public IList<FileViewModel> GetNewCommitFiles()
         {
-            var doc = Document;
-            var newCommitSection = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
+            var newCommitSection = Document.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
+            return GetFilesFromXmlNode(newCommitSection);
+
+        }
+
+        private IList<FileViewModel> GetFilesFromXmlNode(XElement element)
+        {
             var newCommitFiles = new List<FileViewModel>();
-            foreach (var file in newCommitSection.Elements("File"))
+            foreach (var file in element.Elements("File"))
             {
                 newCommitFiles.Add(MapXmlFileToViewModel(file, true));
             }
@@ -139,7 +140,7 @@ namespace CommandHandler.Helpers
                 {
                     var fileModel = MapXmlFileToViewModel(file, false);
 
-                    if (repoFiles.All(f => f.FullName != fileModel.FullName))
+                    if (repoFiles.All(f => f.Name != fileModel.Name))
                     {
                         repoFiles.Add(fileModel);
                     }
@@ -149,7 +150,7 @@ namespace CommandHandler.Helpers
                     }
                     else
                     {
-                        repoFiles.First(f => f.FullName == fileModel.FullName).Update(fileModel);
+                        repoFiles.First(f => f.Name == fileModel.Name).Update(fileModel);
                     }
                 }
             }
@@ -174,9 +175,9 @@ namespace CommandHandler.Helpers
 
         public FileViewModel MapXmlFileToViewModel(XElement file, bool isNew)
         {
-            return new FileViewModel
+            return new FileViewModel(Project.Path)
             {
-                FullName = file.Element("fullName").Value,
+                Name = file.Element("fullName").Value,
                 Version = Int32.Parse(file.Element("version").Value),
                 Status = file.Element("status").Value,
                 LAstWriteTime = DateTime.Parse(file.Element("lwt").Value),
@@ -191,7 +192,7 @@ namespace CommandHandler.Helpers
 
             var doc = Document;
             var commit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == file.CommitId.ToString());
-            var fileMeta = commit.Elements("File").First(e => e.Element("fullName").Value == file.FullName);
+            var fileMeta = commit.Elements("File").First(e => e.Element("fullName").Value == file.Name);
             fileMeta.Element("status").Value = "removed";
             fileMeta.Element("lwt").Value = DateTime.Now.ToString("O");
             var newCommit = doc.Descendants("Commit").First(e => e.Attribute("id").Value == "new");
@@ -202,7 +203,7 @@ namespace CommandHandler.Helpers
 
         private bool CheckForRemovedAlreadyInIdex(FileViewModel file)
         {
-            return GetNewCommitFiles().Any(model => file.FullName == model.FullName && file.Status == model.Status);
+            return GetNewCommitFiles().Any(model => file.Name == model.Name && file.Status == model.Status);
         }
 
         public void RemoveRepitionFromNewCommit()
@@ -210,7 +211,7 @@ namespace CommandHandler.Helpers
             var files = GetNewCommitFiles();
             if (files.Count != files.Distinct(new FileViewModelNameComparer()).Count())
             {
-                var copies = files.GroupBy(f => f.FullName).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+                var copies = files.GroupBy(f => f.Name).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
                 var doc = Document;
                 var newCommit = doc.Descendants("Commit").First(c => c.Attribute("id").Value == "new");
                 foreach (var copy in copies)
@@ -231,8 +232,8 @@ namespace CommandHandler.Helpers
         /// </summary>
         public void ClearIndexFromRemovedFiles(IEnumerable<string> fileNames, IEnumerable<FileViewModel> ncFiles)
         {
-            RemoveFromNewCommit(ncFiles.Where(f => !fileNames.Contains(f.FullName) && f.Status != "removed")
-                .Select(f => f.FullName));
+            RemoveFromNewCommit(ncFiles.Where(f => !fileNames.Contains(f.Name) && f.Status != "removed")
+                .Select(f => f.Name));
         }
 
         private void RemoveFromNewCommit(IEnumerable<string> fileNames)
@@ -240,6 +241,26 @@ namespace CommandHandler.Helpers
             var doc = Document;
             var ncs = GetNewCommitSection(doc);
             ncs.Elements("File").Where(e => fileNames.Contains(e.Element("fullName").Value)).ToList().ForEach(e => e.Remove());
+            doc.Save(PathToSave);
+        }
+
+        public IList<FileViewModel> GetiInitFiles()
+        {
+            var initSection = Document.Descendants("Commit").First(e => e.Attribute("name").Value == "init");
+            return GetFilesFromXmlNode(initSection);
+        }
+
+        public string GetParentCommitId()
+        {
+            return Document.Root.Attribute("currentCommitId").Value;
+        }
+
+        public void UpdateNewCommitSection(string name, string id)
+        {
+            var doc = Document;
+            var newCommit = GetNewCommitSection(doc);
+            newCommit.Attribute("name").Value = name;
+            newCommit.Attribute("id").Value = id;
             doc.Save(PathToSave);
         }
     }

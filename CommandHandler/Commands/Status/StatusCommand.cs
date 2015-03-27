@@ -32,27 +32,27 @@ namespace CommandHandler.Commands.Status
 
             foreach (var file in files)
             {
-                if (repoView.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
+                if (repoView.Any(f => f.Name == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
                     continue;
 
-                if (repoView.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime != file.LastWriteTime))
+                if (repoView.Any(f => f.Name == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime != file.LastWriteTime))
                 {
                     ch.WrtieModified(file.ShotFileName(repoHelper.Project.Path), ConsoleColor.Red);
                     continue;
                 }
 
-                if (repoView.All(f => f.FullName != file.ShotFileName(repoHelper.Project.Path))
-                    && newCommitFiles.All(c => c.FullName != file.ShotFileName(repoHelper.Project.Path)))
+                if (repoView.All(f => f.Name != file.ShotFileName(repoHelper.Project.Path))
+                    && newCommitFiles.All(c => c.Name != file.ShotFileName(repoHelper.Project.Path)))
                 {
                     ch.WrtieAdded(file.ShotFileName(repoHelper.Project.Path), ConsoleColor.Red);
                     continue;
                 }
 
-                if (newCommitFiles.Any(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
+                if (newCommitFiles.Any(f => f.Name == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime))
                 {
                     var model =
-                        newCommitFiles.First(f => f.FullName == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime);
-                    ch.WriteLine(string.Format("\t{0}: {1}", model.Status, model.FullName), ConsoleColor.Green);
+                        newCommitFiles.First(f => f.Name == file.ShotFileName(repoHelper.Project.Path) && f.LAstWriteTime == file.LastWriteTime);
+                    ch.WriteLine(string.Format("\t{0}: {1}", model.Status, model.Name), ConsoleColor.Green);
                     continue;
                 }
 
@@ -61,14 +61,14 @@ namespace CommandHandler.Commands.Status
 
             foreach (var model in repoView)
             {
-                if (files.All(f => f.ShotFileName(repoHelper.Project.Path) != model.FullName)
-                    && newCommitFiles.All(c => c.FullName != model.FullName))
+                if (files.All(f => f.ShotFileName(repoHelper.Project.Path) != model.Name)
+                    && newCommitFiles.All(c => c.Name != model.Name))
                 {
-                    ch.WrtieRemoved(model.FullName,ConsoleColor.Red);
+                    ch.WrtieRemoved(model.Name,ConsoleColor.Red);
                 }
-                else if (newCommitFiles.Any(c => c.FullName == model.FullName))
+                else if (newCommitFiles.Any(c => c.Name == model.Name))
                 {
-                    ch.WrtieRemoved(model.FullName,ConsoleColor.Green);
+                    ch.WrtieRemoved(model.Name,ConsoleColor.Green);
                 }
             }
         }

@@ -21,6 +21,8 @@ namespace ANTIL.Domain.Dao.Implementations
                     Name = projectName,
                     Owner = owner
                 };
+
+                proj = Dao.Save(proj);
             }
 
             return proj;

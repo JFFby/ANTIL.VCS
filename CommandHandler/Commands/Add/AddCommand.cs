@@ -122,11 +122,11 @@ namespace CommandHandler.Commands.Add
             var repoFiles = repositoryhHelper.GetRepositoryFilesFromXML();
             foreach (var repoFile in repoFiles)
             {
-                if (files.All(f => f.ShotFileName(repositoryhHelper.Project.Path) != repoFile.FullName))
+                if (files.All(f => f.ShotFileName(repositoryhHelper.Project.Path) != repoFile.Name))
                 {
                     if (repositoryhHelper.AddRemovedFileInIndex(repoFile))
                     {
-                        ch.WriteLine(string.Format("\t removed: {0}", repoFile.FullName), ConsoleColor.Green);
+                        ch.WriteLine(string.Format("\t removed: {0}", repoFile.Name), ConsoleColor.Green);
                         ++counter;
                     }
                 }
